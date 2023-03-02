@@ -26,7 +26,7 @@ export default {
         <nav class="mt-10">
           <ul class="flex flex-col gap-4">
             <li>
-              <router-link to="/">
+              <router-link to="/home">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
