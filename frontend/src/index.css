@@ -5,3 +5,15 @@
 button {
   padding: 10px;
 }
+
+.form-container {
+  padding: 200px;
+  display: flex;
+  justify-content: center;
+}
+
+.login-button {
+  background-color:#EF4444; /* Set the background color to a green color */
+  color: white; /* Set the text color to white */
+  border-radius: 0.25rem;
+}

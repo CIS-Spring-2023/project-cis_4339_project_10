@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+
 // make all paths and names lowercase for consistency
 const routes = [
   {
@@ -12,6 +13,23 @@ const routes = [
     name: 'intakeform',
     props: true,
     component: () => import('../components/intakeForm.vue')
+  },
+  {
+    path: '/serviceform',
+    name: 'serviceform',
+    props: true,
+    component: () => import('../components/serviceForm.vue')
+  },
+  {
+    path: '/CreateService',
+    name: 'createservice',
+    props: true,
+    component: () => import('../components/CreateService.vue')
+  },
+  {
+    path: '/edit/:id',
+    name: 'edit',
+    component: () => import('../components/EditComponent.vue')
   },
   {
     path: '/findclient',
@@ -35,11 +53,21 @@ const routes = [
     component: () => import('../components/findEvents.vue')
   },
   {
+    path: '/findservice',
+    name: 'findservice',
+    component: () => import('../components/findService.vue')
+  },
+  {
     path: '/eventdetails/:id',
     name: 'eventdetails',
     props: true,
     component: () => import('../components/eventDetails.vue')
-  }
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import('../views/Login.vue')
+  },
 ]
 const router = createRouter({
   history: createWebHistory(),

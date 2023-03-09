@@ -13,7 +13,7 @@ export default {
       // removed unnecessary extra array to track services
       event: {
         name: '',
-        services: [],
+        services: '',
         date: '',
         address: {
           line1: '',

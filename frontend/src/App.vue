@@ -1,9 +1,14 @@
 <script>
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
+import { useLoggedInUserStore } from "@/store/loggedInUser";
 
 export default {
   name: 'App',
+  setup() {
+    const user = useLoggedInUserStore();
+    return { user };
+  },
   data() {
     return {
       orgName: 'Dataplatform'
@@ -16,6 +21,7 @@ export default {
   }
 }
 </script>
+
 <template>
   <main class="flex flex-row">
     <div id="_container" class="h-screen">
@@ -25,6 +31,35 @@ export default {
         </section>
         <nav class="mt-10">
           <ul class="flex flex-col gap-4">
+            <li v-if="!user.isLoggedIn">
+              <router-link class="nav-link" to="/login">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >security</span
+                >
+                Login
+              </router-link>
+            </li>
+          <li class="nav-item dropdown" v-if="user.isLoggedIn">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarUserMenuLink"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="bi bi-person-fill" style="font-size: 1rem; color: hsla(160, 100%, 37%, 1)"></i> Welcome, {{ user.name }}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarUserMenuLink">
+              <li class="nav-item">
+                <a href="/">
+                  <span @click="store.logout()" class="nav-link"><i class="bi bi-box-arrow-left"></i> Logout</span>
+                </a>
+              </li>
+            </ul>
+          </li>
             <li>
               <router-link to="/">
                 <span
@@ -36,7 +71,7 @@ export default {
               </router-link>
             </li>
             <li>
-              <router-link to="/intakeform">
+              <router-link v-if="user.isLoggedIn" to="/intakeform">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -46,7 +81,7 @@ export default {
               </router-link>
             </li>
             <li>
-              <router-link to="/eventform">
+              <router-link v-if="user.isLoggedIn" to="/eventform">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -55,8 +90,38 @@ export default {
                 Create Event
               </router-link>
             </li>
+               <li>
+              <router-link v-if="user.isLoggedIn" to="/serviceform">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >event</span
+                >
+                Create Service
+              </router-link>
+            </li>
             <li>
-              <router-link to="/findclient">
+              <router-link v-if="user.isLoggedIn" to="/createservice">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >event</span
+                >
+                Create Service 1
+              </router-link>
+            </li>
+            <li>
+              <router-link v-if="user.isLoggedIn" to="/findservice">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >search</span
+                >
+                Find Service
+              </router-link>
+            </li>
+            <li>
+              <router-link v-if="user.isLoggedIn" to="/findclient">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -66,7 +131,7 @@ export default {
               </router-link>
             </li>
             <li>
-              <router-link to="/findevents">
+              <router-link v-if="user.isLoggedIn" to="/findevents">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -81,10 +146,10 @@ export default {
     </div>
     <div class="grow w-4/5">
       <section
-        class="justify-end items-center h-24 flex"
+        class="flex justify-start items-center h-24"
         style="background: linear-gradient(250deg, #c8102e 70%, #efecec 50.6%)"
       >
-        <h1 class="mr-20 text-3xl text-white">{{ this.orgName }}</h1>
+        <h1 class="mr-20 text-3xl text-white" style="color: #c80128">{{ this.orgName }}</h1>
       </section>
       <div>
         <router-view></router-view>
