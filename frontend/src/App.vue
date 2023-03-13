@@ -2,6 +2,7 @@
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
 import { useLoggedInUserStore } from "@/store/loggedInUser";
+import { or } from '@vuelidate/validators';
 
 export default {
   name: 'App',
@@ -31,7 +32,7 @@ export default {
         </section>
         <nav class="mt-10">
           <ul class="flex flex-col gap-4">
-            <li v-if="!user.isLoggedIn">
+            <li v-if="!user.isLoggedIn && !user.userloggedin">
               <router-link class="nav-link" to="/login">
                 <span
                   style="position: relative; top: 6px"
@@ -41,7 +42,7 @@ export default {
                 Login
               </router-link>
             </li>
-          <li class="nav-item dropdown" v-if="user.isLoggedIn">
+          <li class="nav-item dropdown" v-if="user.isLoggedIn || user.userloggedin">
             <a
               class="nav-link dropdown-toggle"
               href="#"
@@ -91,7 +92,7 @@ export default {
               </router-link>
             </li>
             <li>
-              <router-link v-if="user.isLoggedIn" to="/findclient">
+              <router-link v-if="user.isLoggedIn || user.userloggedin" to="/findclient">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -101,7 +102,7 @@ export default {
               </router-link>
             </li>
             <li>
-              <router-link v-if="user.isLoggedIn" to="/findevents">
+              <router-link v-if="user.isLoggedIn || user.userloggedin" to="/findevents">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"

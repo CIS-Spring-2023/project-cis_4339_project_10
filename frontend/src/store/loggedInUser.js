@@ -1,45 +1,58 @@
 import { defineStore } from 'pinia'
 
-//defining a store
 export const useLoggedInUserStore = defineStore({
-  // id is only required for devtools with the Pinia store
   id: 'loggedInUser',
-  //central part of the store
   state: () => {
     return {
       name: "",
       isLoggedIn: false,
+      userloggedin: false,
     }
   },
-  // equivalent to methods in components, perfect to define business logic
   actions: {
     async login(username, password) {
       try {
-        const response = await apiLogin(username, password);
-        this.$patch({
-          isLoggedIn: response.isAllowed,
-          name: response.name,
-        })
+        const adminResponse = await adminLogin(username, password);
+        if (adminResponse.isAllowed) {
+          this.$patch({
+            isLoggedIn: adminResponse.isAllowed,
+            name: adminResponse.name,
+          });
+        }
+        const userResponse = await viewer(username, password);
+        if (userResponse.isAllowed) {
+          this.$patch({
+            userloggedin: userResponse.isAllowed,
+            name: userResponse.name,
+          });
+        }
         this.$router.push("/");
       } catch(error) {
         console.log(error)
       }
     },
     logout() {
-      this.patch({
+      this.$patch({
         name: "",
-        isLoggedIn: false
+        isLoggedIn: false,
+        userloggedin: false,
       });
-
-      // we could do other stuff like redirecting the user
-    }
-  }
+    },
+  },
 });
 
-//simulate a login - we will later use our backend to handle authentication
-function apiLogin(u, p) {
-  if (u === "ed" && p === "ed") return Promise.resolve({ isAllowed: true, name: "John Doe" });
-  if (p === "ed") return Promise.resolve({ isAllowed: false });
-  return Promise.reject(new Error("invalid credentials"));
+function adminLogin(u, p) {
+  if (u === "ed" && p === "ed") {
+    return Promise.resolve({ isAllowed: true, name: "John Doe" });
+  } else {
+    return Promise.resolve({ isAllowed: false });
+  }
 }
 
+function viewer(u, p) {
+  if (u === "mztauqir" && p === "zaid123") {
+    return Promise.resolve({ isAllowed: true, name: "Zaid Tauqir" });
+  } else {
+    return Promise.resolve({ isAllowed: false });
+  }
+}
