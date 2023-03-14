@@ -94,7 +94,15 @@ export default {
               <input v-model="newService.status" type="checkbox" />
             </label>
             </div>
-            <button type="submit" class="submit-button1 w-24 custom-button">Create</button>
+          </div>
+          <div class="mt-20 grid-cols-7">
+            <button
+            class="bg-red-700 text-white rounded"
+            @click="handleSubmitForm"
+            type="submit"
+          >
+            Create Service
+          </button>
           </div>
         </div>
       </form>
@@ -134,6 +142,7 @@ export default {
   </main>
 </template>
 <style>
+
 .btn-group {
   display: flex;
   flex-direction: row;

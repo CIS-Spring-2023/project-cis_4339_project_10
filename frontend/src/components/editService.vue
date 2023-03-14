@@ -133,25 +133,23 @@ export default {
       >
         <div></div>
         <div></div>
-        <div class="mt-5">
-          <button
+        <div>
+        <button
             class="mr-10 border border-red-700 bg-white text-red-700 rounded"
             @click="clearSearch"
             type="submit"
           >
             Clear Search
           </button>
-          <div class="mt-5">
           <button
             class="bg-red-700 text-white rounded"
             @click="handleSubmitForm"
             type="submit"
-          >
+            >
             Search Service
           </button>
+          </div>
         </div>
-        </div>
-      </div>
     </div>
 
     <hr class="mt-10 mb-10" />
