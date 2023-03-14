@@ -2,7 +2,6 @@
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
 import { useLoggedInUserStore } from "@/store/loggedInUser";
-import { or } from '@vuelidate/validators';
 
 export default {
   name: 'App',
@@ -32,7 +31,7 @@ export default {
         </section>
         <nav class="mt-10">
           <ul class="flex flex-col gap-4">
-            <li v-if="!user.isLoggedIn && !user.userloggedin">
+            <li v-if="!user.isLoggedIn">
               <router-link class="nav-link" to="/login">
                 <span
                   style="position: relative; top: 6px"
@@ -42,7 +41,7 @@ export default {
                 Login
               </router-link>
             </li>
-          <li class="nav-item dropdown" v-if="user.isLoggedIn || user.userloggedin">
+          <li class="nav-item dropdown" v-if="user.isLoggedIn">
             <a
               class="nav-link dropdown-toggle"
               href="#"
@@ -55,7 +54,7 @@ export default {
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarUserMenuLink">
               <li class="nav-item">
-                <a href="">
+                <a href="/">
                   <span @click="store.logout()" class="nav-link"><i class="bi bi-box-arrow-left"></i> Logout</span>
                 </a>
               </li>
@@ -92,7 +91,17 @@ export default {
               </router-link>
             </li>
             <li>
-              <router-link v-if="user.isLoggedIn || user.userloggedin" to="/findclient">
+              <router-link v-if="user.isLoggedIn" to="/createservice">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >event</span
+                >
+                Create Service 
+              </router-link>
+            </li>
+            <li>
+              <router-link v-if="user.isLoggedIn" to="/findclient">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
@@ -102,13 +111,23 @@ export default {
               </router-link>
             </li>
             <li>
-              <router-link v-if="user.isLoggedIn || user.userloggedin" to="/findevents">
+              <router-link v-if="user.isLoggedIn" to="/findevents">
                 <span
                   style="position: relative; top: 6px"
                   class="material-icons"
                   >search</span
                 >
                 Find Event
+              </router-link>
+            </li>
+            <li>
+              <router-link v-if="user.isLoggedIn" to="/editservice">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >edit</span
+                >
+                Edit Service
               </router-link>
             </li>
           </ul>
@@ -129,8 +148,6 @@ export default {
   </main>
 </template>
 <style>
-
-
 #_container {
   background-color: #c8102e;
   color: white;

@@ -22,6 +22,12 @@ export default {
 
   methods: {
     addService() {
+  // Check if the required fields are filled out
+  if (this.newService.name === '' || this.newService.description === '') {
+    alert('Please enter service name and description');
+    return;
+  }
+
   // Add the new service to the services array
   this.services.push({
     id: this.services.length + 1, // Generate a new ID
@@ -64,7 +70,7 @@ export default {
       <h1
         class="font-bold text-4xl text-red-700 tracking-widest text-center mt-10"
       >
-        Edit Service
+        Create Service
       </h1>
     </div>
     <div class="px-10 pt-5">
@@ -72,7 +78,7 @@ export default {
         <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
         >
-          <h2 class="text-2xl font-bold">Service Details</h2>
+          <h2 class="text-2xl font-bold">Create Service</h2>
         <div class="flex flex-col">
           <div class="flex">
             <label class="block flex flex-col">
@@ -88,7 +94,7 @@ export default {
               <input v-model="newService.status" type="checkbox" />
             </label>
             </div>
-            <button type="submit" class="submit-button w-24">Create</button>
+            <button type="submit" class="submit-button1 w-24 custom-button">Create</button>
           </div>
         </div>
       </form>
@@ -142,7 +148,7 @@ export default {
   font-weight: bold;
   text-align: center;
   text-decoration: none;
-  background-color: #28a745;
+  background-color: #C8102E;
   color: #fff;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
@@ -163,7 +169,7 @@ export default {
 }
 
 .btn-success:hover {
-  background-color: #218838;
+  background-color: #C8102E;
 }
 .btn-danger:hover {
   background-color: #6b1405;
@@ -191,8 +197,8 @@ export default {
   border: 1px solid #ccc;
   width: 200px;
 }
-.submit-button {
-  background-color: #28a745;
+.submit-button1 {
+  background-color: #C8102E;
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -200,4 +206,17 @@ export default {
   font-size: 16px;
   cursor: pointer;
 }
+.submit-button1:hover {
+  background-color: #6b1405;
+}
+.create-button {
+  background-color: #a72c28;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 </style>

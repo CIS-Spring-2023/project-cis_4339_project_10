@@ -26,6 +26,11 @@ const routes = [
     component: () => import('../components/findClient.vue')
   },
   {
+    path: '/editservice',
+    name: 'editservice',
+    component: () => import('../components/editService.vue')
+  },
+  {
     path: '/updateclient/:id',
     name: 'updateclient',
     props: true,
