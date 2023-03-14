@@ -104,9 +104,8 @@ export default {
               </tr>
             </tbody>
           </table>
-          <div>
+          <div> 
             <AttendanceChart
-              v-if="!loading && !error"
               :label="labels"
               :chart-data="chartData"
             ></AttendanceChart>

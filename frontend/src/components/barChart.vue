@@ -1,7 +1,6 @@
 <script>
 import { Chart, registerables } from 'chart.js'
 Chart.register(...registerables)
-
 export default {
   props: {
     label: {
@@ -17,38 +16,29 @@ export default {
       e.replace(/[\d\.]+\)$/g, '1)')
     )
     await new Chart(this.$refs.attendanceChart, {
-      type: 'bar',
+      //pie type
+      type: 'pie',
       data: {
-        labels: this.label,
+        //labels on the pie chart
+        labels: ['Events', 'Attendees', 'Employees'],
         datasets: [
           {
-            borderWidth: 1,
-            backgroundColor: backgroundColor,
-            borderColor: borderColor,
-            data: this.chartData
+            borderWidth: 2,
+            //color of the pie chart
+            backgroundColor: ['#28536B', '#C2948A', '#7EA8BE'],
+            //the data inside the pie chart
+            data: [60, 242, 20]
           }
         ]
       },
       options: {
-        scales: {
-          y: {
-            ticks: {
-              stepSize: 1
-            }
-          },
-          x: {
-            gridLines: {
-              display: false
-            }
-          }
-        },
         plugins: {
           legend: {
             display: false
           }
         },
         responsive: true,
-        maintainAspectRatio: true
+        maintainAspectRatio: false
       }
     })
   },
@@ -62,6 +52,6 @@ export default {
 </script>
 <template>
   <div class="shadow-lg rounded-lg overflow-hidden">
-    <canvas class="p-10" ref="attendanceChart"></canvas>
+    <canvas class="p-5" ref="attendanceChart"></canvas>
   </div>
 </template>
