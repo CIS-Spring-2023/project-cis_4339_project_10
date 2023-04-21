@@ -46,7 +46,7 @@
       };
     },
     created() {
-      let apiURL = `http://localhost:3001/service/${this.$route.params.id}`;
+      let apiURL = `http://localhost:3000/service/${this.$route.params.id}`;
   
       axios.get(apiURL).then((res) => {
         this.service = res.data;
@@ -54,7 +54,7 @@
     },
     methods: {
       handleUpdateForm() {
-        let apiURL = `http://localhost:3001/service/${this.$route.params.id}`;
+        let apiURL = `http://localhost:3000/service/${this.$route.params.id}`;
   
         axios
           .put(apiURL, this.service)
