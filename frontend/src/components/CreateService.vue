@@ -83,7 +83,7 @@ export default {
     },
 
     editService(serviceID) {
-      this.$router.push({ name: 'serviceetails', params: { id: serviceID } });
+      this.$router.push({ name: 'serviceDetails', params: { id: serviceID } });
     },
   },
 
