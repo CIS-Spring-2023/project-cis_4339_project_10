@@ -20,19 +20,20 @@ export default {
       services: [],
     };
   },
-
   methods: {
     async handleSubmitForm() {
       // Checks to see if there are any errors in validation
       const isFormCorrect = await this.v$.$validate()
       // If no errors found. isFormCorrect = True then the form is submitted
       if (isFormCorrect) {
+        const status = this.newService.status ? "Active" : "Inactive";
+        this.newService.status = status;
         axios
           .post(`${apiURL}/services`, this.newService)
           .then((response) => {
             console.log(response)
             alert('Service has been added.')
-            this.$router.push({ name: 'createservice' })
+            this.$router.push({ name: 'findservice' })
           })
           .catch((error) => {
             console.log(error)

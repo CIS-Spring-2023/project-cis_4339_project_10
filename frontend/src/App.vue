@@ -77,7 +77,7 @@
                 </router-link>
               </li>
               <li>
-                <router-link v-if="user.isLoggedIn" to="/createservice">
+                <router-link v-if="user.isLoggedIn" to="/serviceForm">
                   <span style="position: relative; top: 6px" class="material-icons">event</span>
                   Create Service
                 </router-link>
@@ -95,9 +95,9 @@
                 </router-link>
               </li>
               <li>
-                <router-link v-if="user.isLoggedIn || user.userloggedin" to="/servicecreate">
+                <router-link v-if="user.isLoggedIn || user.userloggedin" to="/findservice">
                   <span style="position: relative; top: 6px" class="material-icons">search</span>
-                  service create
+                  Find Service
                 </router-link>
               </li>
             </ul>
