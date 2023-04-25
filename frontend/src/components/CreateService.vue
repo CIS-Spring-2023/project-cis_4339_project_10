@@ -1,7 +1,8 @@
 <script>
-import { DateTime } from 'luxon'
-import axios from 'axios'
-const apiURL = import.meta.env.VITE_ROOT_API
+import { DateTime } from 'luxon';
+import axios from 'axios';
+
+const apiURL = import.meta.env.VITE_ROOT_API;
 
 export default {
   data() {
@@ -11,57 +12,86 @@ export default {
         description: '',
         status: false,
       },
-      services: [
-        { id: 1, name: 'Service A', description: 'Description of Service A', status: 'Active' },
-        { id: 2, name: 'Service B', description: 'Description of Service B', status: 'Active' },
-        { id: 3, name: 'Service C', description: 'Description of Service C', status: 'Inactive' },
-      ],
-      // Parameter for search to occur
-  };
-},
+      services: [],
+    };
+  },
 
   methods: {
-    addService() {
-  // Check if the required fields are filled out
-  if (this.newService.name === '' || this.newService.description === '') {
-    alert('Please enter service name and description');
-    return;
-  }
+    async addService() {
+      // Check if the required fields are filled out
+      if (this.newService.name === '' || this.newService.description === '') {
+        alert('Please enter service name and description');
+        return;
+      }
+      console.log('newService:', this.newService);
 
-  // Add the new service to the services array
-  this.services.push({
-    id: this.services.length + 1, // Generate a new ID
-    name: this.newService.name,
-    description: this.newService.description,
-    status: this.newService.status ? 'Active' : 'Inactive'
-  });
+      try {
+        const { data } = await axios.post(`${apiURL}/services`, {
+          name: this.newService.name,
+          description: this.newService.description,
+          status: this.newService.status ? 'Active' : 'Inactive',
+        });
 
-  // Reset the newService object
-  this.newService = {
-    name: '',
-    description: '',
-    status: false
-  };
+        // Add the new service to the services array
+        this.services.push(data);
+        
+        // Reset the newService object
+        this.newService = {
+          name: '',
+          description: '',
+          status: false,
+        };
+      } catch (error) {
+        console.error(error);
+        alert('Failed to create service.');
+      }
     },
+
+    async deleteService(index) {
+      if (confirm('Are you sure you want to delete this service?')) {
+        try {
+          const { data } = await axios.delete(`${apiURL}/services/${this.services[index].id}`);
+          console.log(data);
+
+          // Remove the service from the services array
+          this.services.splice(index, 1);
+        } catch (error) {
+          console.error(error);
+          alert('Failed to delete service.');
+        }
+      }
+    },
+
+    async fetchServices() {
+      try {
+        const { data } = await axios.get(`${apiURL}/services`);
+        this.services = data;
+      } catch (error) {
+        console.error(error);
+        alert('Failed to fetch services.');
+      }
+    },
+
     // better formattedDate
     formattedDate(datetimeDB) {
       const dt = DateTime.fromISO(datetimeDB, {
-        zone: 'utc'
-      })
+        zone: 'utc',
+      });
       return dt
         .setZone(DateTime.now().zoneName, { keepLocalTime: true })
-        .toLocaleString()
+        .toLocaleString();
     },
-    deleteService(index) {
-      if (confirm("Are you sure you want to delete this service?")) {
-        this.services.splice(index, 1);
-      }
-    },
+
     editService(serviceID) {
-      this.$router.push({ name: 'servicedetails', params: { id: serviceID } })
-    }
-  }
-}
+      this.$router.push({ name: 'serviceetails', params: { id: serviceID } });
+    },
+  },
+
+  created() {
+    this.fetchServices();
+  },
+};
+
 </script>
 
 <template>
@@ -98,7 +128,6 @@ export default {
           <div class="mt-20 grid-cols-7">
             <button
             class="bg-red-700 text-white rounded"
-            @click="handleSubmitForm"
             type="submit"
           >
             Create Service
@@ -124,7 +153,7 @@ export default {
             <tbody class="divide-y divide-gray-300">
               <tr
                 v-for="(service, index) in services"
-                :key="index"
+                :key="index" @click="editService(service._id)"
                 :class="{'row-active': service.status === 'Active', 'row-inactive': service.status === 'Inactive'}"
               >
                 <td class="p-2 text-left">{{ service.name }}</td>

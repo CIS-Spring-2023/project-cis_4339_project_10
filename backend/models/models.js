@@ -5,10 +5,7 @@ const Schema = mongoose.Schema
 // collection for service
 const serviceDataSchema = new Schema(
   {
-    _id: {
-      type: String,
-      required: true
-    },
+    _id: {type: String, default: uuid.v1 },
     name: {
       type: String,
       required: true
@@ -18,7 +15,7 @@ const serviceDataSchema = new Schema(
       required: true
     },
     status: {
-      type: Boolean,
+      type: String,
       required: true
     }
   },
@@ -156,6 +153,8 @@ const eventDataSchema = new Schema(
 const clients = mongoose.model('client', clientDataSchema)
 const orgs = mongoose.model('org', orgDataSchema)
 const events = mongoose.model('event', eventDataSchema)
+const services = mongoose.model('service', serviceDataSchema)
+
 
 // package the models in an object to export
-module.exports = { clients, orgs, events }
+module.exports = { clients, orgs, events, services }

@@ -26,9 +26,9 @@ const routes = [
     component: () => import('../components/findClient.vue')
   },
   {
-    path: '/editservice',
-    name: 'editservice',
-    component: () => import('../components/editService.vue')
+    path: '/serviceDetails',
+    name: 'serviceDetails',
+    component: () => import('../components/serviceDetails.vue')
   },
   {
     path: '/updateclient/:id',
