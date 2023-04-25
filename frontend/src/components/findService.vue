@@ -13,38 +13,23 @@ export default {
         status: false,
       },
       services: [],
+      searchBy: '',
+      name: '',
+      status: ''
     };
   },
 
   methods: {
-    async addService() {
-      // Check if the required fields are filled out
-      if (this.newService.name === '' || this.newService.description === '') {
-        alert('Please enter service name and description');
-        return;
+    handleSubmitForm() {
+      let endpoint = ''
+      if (this.searchBy === 'Service Name') {
+        endpoint = `services/search/?name=${this.name}&searchBy=name`
+      } else if (this.searchBy === 'Service Status') {
+        endpoint = `services/search/?status=${this.status}&searchBy=status`
       }
-      console.log('newService:', this.newService);
-
-      try {
-        const { data } = await axios.post(`${apiURL}/services`, {
-          name: this.newService.name,
-          description: this.newService.description,
-          status: this.newService.status ? 'Active' : 'Inactive',
-        });
-
-        // Add the new service to the services array
-        this.services.push(data);
-        
-        // Reset the newService object
-        this.newService = {
-          name: '',
-          description: '',
-          status: false,
-        };
-      } catch (error) {
-        console.error(error);
-        alert('Failed to create service.');
-      }
+      axios.get(`${apiURL}/${endpoint}`).then((res) => {
+        this.services = res.data
+      })
     },
 
     async deleteService(index) {
@@ -101,41 +86,69 @@ export default {
       <h1
         class="font-bold text-4xl text-red-700 tracking-widest text-center mt-10"
       >
-        Create Service
+        Find Service
       </h1>
     </div>
-    <div class="px-10 pt-5">
-      <form @submit.prevent="addService" class="service-form">
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
-        >
-          <h2 class="text-2xl font-bold">Create Service</h2>
-        <div class="flex flex-col">
-          <div class="flex">
-            <label class="block flex flex-col">
-              <span class="text-gray-700 font-normal">Name:</span>
-              <input v-model="newService.name" type="text" />
-            </label>
-            <label class="block flex flex-col ml-6">
-              <span class="text-gray-700">Description:</span>
-              <input v-model="newService.description" type="text" />
-            </label>
-            <label class="block flex items-center ml-6">
-              <span class="text-gray-700">Status:</span>
-              <input v-model="newService.status" type="checkbox" />
-            </label>
-            </div>
-          </div>
-          <div class="mt-20 grid-cols-7">
-            <button
-            class="bg-red-700 text-white rounded"
-            type="submit"
-          >
-            Create Service
-          </button>
-          </div>
-        </div>
-      </form>
+    <div class="px-10 pt-20">
+    <div
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
+>
+  <h2 class="text-2xl font-bold">Search Services By</h2>
+  <!-- Displays Client Name search field -->
+  <div class="flex flex-col">
+    <select
+      class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+      v-model="searchBy"
+    >
+      <option value="Service Name">Service Name</option>
+      <!-- <option value="Service Status">Service Status</option> -->
+    </select>
+  </div>
+  <div class="flex flex-col" v-if="searchBy === 'Service Name'">
+    <label class="block">
+      <input
+        type="text"
+        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        v-model="name"
+        v-on:keyup.enter="handleSubmitForm"
+        placeholder="Enter Service name"
+      />
+    </label>
+  </div>
+  <!-- <div class="flex flex-col" v-if="searchBy === 'Service Status'">
+    <input
+      class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+      type="status"
+      v-model="status"
+      v-on:keyup.enter="handleSubmitForm"
+      placeholder="Enter Service Status"
+    />
+  </div> -->
+  </div>
+</div> <!-- Closing tag for the first div container -->
+
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
+>
+  <div></div>
+  <div></div>
+  <div class="mt-5 grid-cols-2">
+    <button
+      class="mr-10 border border-red-700 bg-white text-red-700 rounded"
+      @click="clearSearch"
+      type="submit"
+    >
+      Clear Search
+    </button>
+    <button
+      class="bg-red-700 text-white rounded"
+      @click="handleSubmitForm"
+      type="submit"
+    >
+      Search Event
+    </button>
+  </div>
+</div>
       <hr class="mt-10 mb-10" />
       <!-- Display Found Data -->
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
@@ -168,7 +181,6 @@ export default {
           </table>
         </div>
       </div>
-    </div>
   </main>
 </template>
 <style>
