@@ -7,15 +7,11 @@ const apiURL = import.meta.env.VITE_ROOT_API;
 export default {
   data() {
     return {
-      newService: {
-        name: '',
-        description: '',
-        status: false,
-      },
       services: [],
+      // Parameter for search to occur
       searchBy: '',
       name: '',
-      status: ''
+      description:'',
     };
   },
 
@@ -24,8 +20,8 @@ export default {
       let endpoint = ''
       if (this.searchBy === 'Service Name') {
         endpoint = `services/search/?name=${this.name}&searchBy=name`
-      } else if (this.searchBy === 'Service Status') {
-        endpoint = `services/search/?status=${this.status}&searchBy=status`
+      } else if (this.searchBy === 'Service Description') {
+        endpoint = `services/search/?description=${this.description}&searchBy=description`
       }
       axios.get(`${apiURL}/${endpoint}`).then((res) => {
         this.services = res.data
@@ -57,6 +53,13 @@ export default {
         alert('Failed to fetch services.');
       }
     },
+    clearSearch() {
+      // Resets all the variables
+      this.searchBy = ''
+      this.name = ''
+      this.description = ''
+      this.fetchServices();
+    },
 
     // better formattedDate
     formattedDate(datetimeDB) {
@@ -72,7 +75,6 @@ export default {
       this.$router.push({ name: 'servicedetails', params: { id: serviceID } });
     },
   },
-
   created() {
     this.fetchServices();
   },
@@ -101,7 +103,7 @@ export default {
       v-model="searchBy"
     >
       <option value="Service Name">Service Name</option>
-      <!-- <option value="Service Status">Service Status</option> -->
+      <option value="Service Description">Service Description</option>
     </select>
   </div>
   <div class="flex flex-col" v-if="searchBy === 'Service Name'">
@@ -115,15 +117,15 @@ export default {
       />
     </label>
   </div>
-  <!-- <div class="flex flex-col" v-if="searchBy === 'Service Status'">
+  <div class="flex flex-col" v-if="searchBy === 'Service Description'">
     <input
       class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-      type="status"
-      v-model="status"
+      type="text"
+      v-model="description"
       v-on:keyup.enter="handleSubmitForm"
-      placeholder="Enter Service Status"
+      placeholder="Enter Service description"
     />
-  </div> -->
+  </div>
   </div>
 </div> <!-- Closing tag for the first div container -->
 
@@ -154,6 +156,7 @@ export default {
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
         <div class="ml-10">
           <h2 class="text-2xl font-bold">List of Services</h2>
+          <h3 class="italic">Click table row to edit/display an entry</h3>
         </div>
         <div class="flex flex-col col-span-2">
           <table class="min-w-full shadow-md rounded">

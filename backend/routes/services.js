@@ -44,8 +44,8 @@ router.get('/search/', (req, res, next) => {
       // match service name, no anchor
       dbQuery.name = { $regex: `${req.query.name}`, $options: 'i' }
       break
-    case 'date':
-      dbQuery.date = req.query.serviceDate;
+    case 'description':
+      dbQuery.description = req.query.description;
       break;
     default:
       return res.status(400).send('invalid searchBy')
