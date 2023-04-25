@@ -147,7 +147,7 @@ export default {
       @click="handleSubmitForm"
       type="submit"
     >
-      Search Event
+      Search Service
     </button>
   </div>
 </div>
