@@ -95,9 +95,9 @@
                 </router-link>
               </li>
               <li>
-                <router-link v-if="user.isLoggedIn" to="/editservice">
-                  <span style="position: relative; top: 6px" class="material-icons">edit</span>
-                  Edit Service
+                <router-link v-if="user.isLoggedIn || user.userloggedin" to="/servicecreate">
+                  <span style="position: relative; top: 6px" class="material-icons">search</span>
+                  service create
                 </router-link>
               </li>
             </ul>

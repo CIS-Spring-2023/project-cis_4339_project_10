@@ -18,7 +18,7 @@ router.get('/', (req, res, next) => {
     })
     // sort by date ascending
     .sort({ date: 1 })
-    .limit(10);
+    .limit(100);
 });
 
 // GET single service by ID

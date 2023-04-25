@@ -6,9 +6,12 @@ import { DateTime } from 'luxon'
 const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
+  setup() {
+    return { v$: useVuelidate({ $autoDirty: true }) }
+  },
   data() {
     return {
-      newService: {
+      service: {
         name: '',
         description: '',
         status: false,
@@ -17,8 +20,8 @@ export default {
     };
   },
   created() {
-    axios.get(`${apiURL}/service/id/${this.$route.params.id}`).then((res) => {
-      this.event = res.data
+    axios.get(`${apiURL}/services/id/${this.$route.params.id}`).then((res) => {
+      this.service = res.data
       // this.event.date = this.formattedDate(this.event.date)
       // this.event.attendees.forEach((e) => {
       //   axios.get(`${apiURL}/clients/id/${e}`).then((res) => {
@@ -56,7 +59,7 @@ export default {
   // sets validations for the various data properties
   validations() {
     return {
-      event: {
+      service: {
         name: { required },
       }
     }
@@ -69,7 +72,7 @@ export default {
       <h1
         class="font-bold text-4xl text-red-700 tracking-widest text-center mt-10"
       >
-        Update Event
+        Update Service
       </h1>
     </div>
     <div class="px-10 py-20">
@@ -86,12 +89,12 @@ export default {
               <input
                 type="text"
                 class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                v-model="event.name"
+                v-model="service.name"
               />
-              <span class="text-black" v-if="v$.event.name.$error">
+              <span class="text-black" v-if="v$.service.name.$error">
                 <p
                   class="text-red-700"
-                  v-for="error of v$.event.name.$errors"
+                  v-for="error of v$.service.name.$errors"
                   :key="error.$uid"
                 >
                   {{ error.$message }}!
@@ -99,9 +102,10 @@ export default {
               </span>
             </label>
           </div>
+          </div>
 
           <!-- form field -->
-          <div class="flex flex-col">
+          <!-- <div class="flex flex-col">
             <label class="block">
               <span class="text-gray-700">Date</span>
               <span style="color: #ff0000">*</span>
@@ -120,7 +124,7 @@ export default {
                 </p>
               </span>
             </label>
-          </div>
+          </div> -->
 
           <div></div>
           <div></div>
@@ -132,7 +136,7 @@ export default {
               <textarea
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 rows="2"
-                v-model="event.description"
+                v-model="service.description"
               ></textarea>
             </label>
           </div>
@@ -141,7 +145,7 @@ export default {
           <div></div>
           <div></div>
           <!-- form field -->
-          <div class="flex flex-col grid-cols-3">
+          <!-- <div class="flex flex-col grid-cols-3">
             <label>Services Offered at Event</label>
             <div>
               <label for="familySupport" class="inline-flex items-center">
@@ -196,15 +200,16 @@ export default {
               </label>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- grid container -->
         <div
           class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
         >
           <h2 class="text-2xl font-bold">Address</h2>
+          </div>
           <!-- form field -->
-          <div class="flex flex-col">
+          <!-- <div class="flex flex-col">
             <label class="block">
               <span class="text-gray-700">Address Line 1</span>
               <input
@@ -214,9 +219,9 @@ export default {
                 v-model="event.address.line1"
               />
             </label>
-          </div>
+          </div> -->
           <!-- form field -->
-          <div class="flex flex-col">
+          <!-- <div class="flex flex-col">
             <label class="block">
               <span class="text-gray-700">Address Line 2</span>
               <input
@@ -226,9 +231,9 @@ export default {
                 v-model="event.address.line2"
               />
             </label>
-          </div>
+          </div> -->
           <!-- form field -->
-          <div class="flex flex-col">
+          <!-- <div class="flex flex-col">
             <label class="block">
               <span class="text-gray-700">City</span>
               <input
@@ -239,9 +244,9 @@ export default {
               />
             </label>
           </div>
-          <div></div>
+          <div></div> -->
           <!-- form field -->
-          <div class="flex flex-col">
+          <!-- <div class="flex flex-col">
             <label class="block">
               <span class="text-gray-700">County</span>
               <input
@@ -251,9 +256,9 @@ export default {
                 v-model="event.address.county"
               />
             </label>
-          </div>
+          </div> -->
           <!-- form field -->
-          <div class="flex flex-col">
+          <!-- <div class="flex flex-col">
             <label class="block">
               <span class="text-gray-700">Zip Code</span>
               <input
@@ -264,7 +269,7 @@ export default {
               />
             </label>
           </div>
-        </div>
+        </div> -->
 
         <!-- grid container -->
         <div
@@ -272,7 +277,7 @@ export default {
         >
           <div class="flex justify-between mt-10 mr-20">
             <button
-              @click="handleEventUpdate"
+              @click="handleServiceUpdate"
               type="submit"
               class="bg-green-700 text-white rounded"
             >
@@ -281,7 +286,7 @@ export default {
           </div>
           <div class="flex justify-between mt-10 mr-20">
             <button
-              @click="eventDelete"
+              @click="ServiceDelete"
               type="submit"
               class="bg-red-700 text-white rounded"
             >

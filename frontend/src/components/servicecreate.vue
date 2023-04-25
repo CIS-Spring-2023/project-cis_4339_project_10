@@ -1,10 +1,15 @@
 <script>
+import useVuelidate from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 import { DateTime } from 'luxon';
 import axios from 'axios';
 
 const apiURL = import.meta.env.VITE_ROOT_API;
 
 export default {
+  setup() {
+    return { v$: useVuelidate({ $autoDirty: true }) }
+  },
   data() {
     return {
       newService: {
@@ -17,33 +22,21 @@ export default {
   },
 
   methods: {
-    async addService() {
-      // Check if the required fields are filled out
-      if (this.newService.name === '' || this.newService.description === '') {
-        alert('Please enter service name and description');
-        return;
-      }
-      console.log('newService:', this.newService);
-
-      try {
-        const { data } = await axios.post(`${apiURL}/services`, {
-          name: this.newService.name,
-          description: this.newService.description,
-          status: this.newService.status ? 'Active' : 'Inactive',
-        });
-
-        // Add the new service to the services array
-        this.services.push(data);
-        
-        // Reset the newService object
-        this.newService = {
-          name: '',
-          description: '',
-          status: false,
-        };
-      } catch (error) {
-        console.error(error);
-        alert('Failed to create service.');
+    async handleSubmitForm() {
+      // Checks to see if there are any errors in validation
+      const isFormCorrect = await this.v$.$validate()
+      // If no errors found. isFormCorrect = True then the form is submitted
+      if (isFormCorrect) {
+        axios
+          .post(`${apiURL}/services`, this.newService)
+          .then((response) => {
+            console.log(response)
+            alert('Service has been added.')
+            this.$router.push({ name: 'createservice' })
+          })
+          .catch((error) => {
+            console.log(error)
+          })
       }
     },
 
@@ -66,7 +59,6 @@ export default {
       try {
         const { data } = await axios.get(`${apiURL}/services`);
         this.services = data;
-        console.log(data)
       } catch (error) {
         console.error(error);
         alert('Failed to fetch services.');
@@ -87,11 +79,20 @@ export default {
       this.$router.push({ name: 'servicedetails', params: { id: serviceID } });
     },
   },
-
+  
+  validations() {
+    return {
+      newService: {
+        name: { required }
+      },
+    }
+  },
+  
   created() {
     this.fetchServices();
   },
 };
+
 
 </script>
 
@@ -105,7 +106,7 @@ export default {
       </h1>
     </div>
     <div class="px-10 pt-5">
-      <form @submit.prevent="addService" class="service-form">
+      <form @submit.prevent="handleSubmitForm" class="service-form">
         <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
         >
@@ -137,37 +138,6 @@ export default {
         </div>
       </form>
       <hr class="mt-10 mb-10" />
-      <!-- Display Found Data -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
-        <div class="ml-10">
-          <h2 class="text-2xl font-bold">List of Services</h2>
-        </div>
-        <div class="flex flex-col col-span-2">
-          <table class="min-w-full shadow-md rounded">
-            <thead class="bg-gray-50 text-xl">
-              <tr>
-                <th class="p-4 text-left">Service Name</th>
-                <th class="p-4 text-left">Service Description</th>
-                <th class="p-4 text-left">Service Status</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-300">
-              <tr
-                v-for="(service, index) in services"
-                :key="index" @click="editService(service._id)"
-                :class="{'row-active': service.status === 'Active', 'row-inactive': service.status === 'Inactive'}"
-              >
-                <td class="p-2 text-left">{{ service.name }}</td>
-                <td class="p-2 text-left">{{ service.description }}</td>
-                <td class="p-2 text-left">{{ service.status }}</td>
-                <td class="p-2 text-left">{{ service.serviceID }}</td>
-                <td>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   </main>
 </template>

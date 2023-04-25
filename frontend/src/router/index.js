@@ -26,8 +26,8 @@ const routes = [
     component: () => import('../components/findClient.vue')
   },
   {
-    path: '/serviceDetails',
-    name: 'serviceDetails',
+    path: '/servicedetails/:id',
+    name: 'servicedetails',
     component: () => import('../components/serviceDetails.vue')
   },
   {
@@ -53,16 +53,18 @@ const routes = [
     component: () => import('../components/CreateService.vue')
   },
   {
+    path: '/servicecreate',
+    name: 'servicecreate',
+    props: true,
+    component: () => import('../components/servicecreate.vue')
+  },
+  {
     path: '/eventdetails/:id',
     name: 'eventdetails',
     props: true,
     component: () => import('../components/eventDetails.vue')
   },
-  {
-    path: '/edit/:id',
-    name: 'edit',
-    component: () => import('../components/EditComponent.vue')
-  }
+  
 ]
 const router = createRouter({
   history: createWebHistory(),

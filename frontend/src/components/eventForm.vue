@@ -50,7 +50,6 @@ export default {
     },
    async getServices() {
       axios.get(`${apiURL}/services`).then((res) => {
-        console.log('FUCK U',res.jsonify)
         this.services = res.data
       })
       window.scrollTo(0, 0)
