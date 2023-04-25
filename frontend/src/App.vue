@@ -1,7 +1,6 @@
 <script>
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
-import { useLoggedInUserStore } from "@/store/loggedInUser";
 
 export default {
   name: 'App',

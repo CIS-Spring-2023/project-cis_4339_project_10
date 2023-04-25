@@ -2,6 +2,30 @@ const uuid = require('uuid')
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+// collection for service
+const serviceDataSchema = new Schema(
+  {
+    _id: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    status: {
+      type: Boolean,
+      required: true
+    }
+  },
+  {
+    collection: 'service'
+  }
+)
 // collection for org
 const orgDataSchema = new Schema(
   {
@@ -18,7 +42,6 @@ const orgDataSchema = new Schema(
     collection: 'org'
   }
 )
-
 // collection for clients
 const clientDataSchema = new Schema(
   {
