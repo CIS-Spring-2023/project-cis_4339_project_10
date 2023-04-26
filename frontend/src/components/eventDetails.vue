@@ -41,7 +41,7 @@ export default {
       this.event.attendees.forEach((e) => {
         axios.get(`${apiURL}/clients/id/${e}`).then((res) => {
           this.clientAttendees.push(res.data)
-          axios.get(`${apiURL}/services/id/$${this.$$route.params.id}`).then((res) => {
+          axios.get(`${apiURL}/services/id/$${this.$route.params.id}`).then((res) => {
             this.services = res.data.map(service => ({ ...service, selected: true }))
         })
       })
