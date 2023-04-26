@@ -1,98 +1,94 @@
-  <script>
-  import useVuelidate from '@vuelidate/core'
-  import { required } from '@vuelidate/validators'
-  import axios from 'axios'
-  import { DateTime } from 'luxon'
-  const apiURL = import.meta.env.VITE_ROOT_API
+<script>
+import useVuelidate from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+import axios from 'axios'
+import { DateTime } from 'luxon'
+const apiURL = import.meta.env.VITE_ROOT_API
 
-  export default {
-    props: ['id'],
-    setup() {
-      return { v$: useVuelidate({ $autoDirty: true }) }
-    },
-    data() {
-      return {
-        clientAttendees: [],
-        event: {
-          name: '',
-          services: [],
-          date: '',
-          address: {
-            line1: '',
-            line2: '',
-            city: '',
-            county: '',
-            zip: ''
-          },
-          description: '',
-          attendees: []
-        },
-        services:[]
-        
-      }
-    },
-    computed:{
-    checkboxValue() {
-      return (service) => this.event.services.includes(service);
-    },
+export default {
+  props: ['id'],
+  setup() {
+    return { v$: useVuelidate({ $autoDirty: true }) }
   },
-    mounted() {
+  data() {
+    return {
+      clientAttendees: [],
+      event: {
+        name: '',
+        services: [],
+        date: '',
+        address: {
+          line1: '',
+          line2: '',
+          city: '',
+          county: '',
+          zip: ''
+        },
+        description: '',
+        attendees: []
+      },
+      services:[]
+    }
+  },
+  computed:{
+  },
+  mounted() {
     this.getServices()
   },
-    created() {
-      axios.get(`${apiURL}/events/id/${this.$route.params.id}`).then((res) => {
-        this.event = res.data
-        this.event.date = this.formattedDate(this.event.date)
-        this.event.attendees.forEach((e) => {
-          axios.get(`${apiURL}/clients/id/${e}`).then((res) => {
-            this.clientAttendees.push(res.data)
-          })
+  created() {
+    axios.get(`${apiURL}/events/id/${this.$route.params.id}`).then((res) => {
+      this.event = res.data
+      this.event.date = this.formattedDate(this.event.date)
+      this.event.attendees.forEach((e) => {
+        axios.get(`${apiURL}/clients/id/${e}`).then((res) => {
+          this.clientAttendees.push(res.data)
         })
       })
+    })
+  },
+  methods: {
+    // better formatted date, converts UTC to local time
+    formattedDate(datetimeDB) {
+      const dt = DateTime.fromISO(datetimeDB, {
+        zone: 'utc'
+      })
+      return dt
+        .setZone(DateTime.now().zoneName, { keepLocalTime: true })
+        .toISODate()
     },
-    methods: {
-      // better formatted date, converts UTC to local time
-      formattedDate(datetimeDB) {
-        const dt = DateTime.fromISO(datetimeDB, {
-          zone: 'utc'
-        })
-        return dt
-          .setZone(DateTime.now().zoneName, { keepLocalTime: true })
-          .toISODate()
-      },
-      async getServices() {
+    async getServices() {
       axios.get(`${apiURL}/services`).then((res) => {
-        this.services = res.data
+        this.services = res.data.map(service => ({ ...service, selected: this.event.services.includes(service) }))
+        this.services.forEach(service => { service.selected = false })
       })
       window.scrollTo(0, 0)
     },
-      handleEventUpdate() {
-        axios.put(`${apiURL}/events/update/${this.id}`, this.event).then(() => {
-          alert('Update has been saved.')
-          this.$router.back()
-        })
-      },
-      editClient(clientID) {
-        this.$router.push({ name: 'updateclient', params: { id: clientID } })
-      },
-      eventDelete() {
-        axios.delete(`${apiURL}/events/${this.id}`).then(() => {
-          alert('Event has been deleted.')
-          this.$router.push({ name: 'findevents' })
-        })
-      }
+    handleEventUpdate() {
+      axios.put(`${apiURL}/events/update/${this.id}`, this.event).then(() => {
+        alert('Update has been saved.')
+        this.$router.back()
+      })
     },
-    // sets validations for the various data properties
-    validations() {
-      return {
-        event: {
-          name: { required },
-          date: { required }
-        }
+    editClient(clientID) {
+      this.$router.push({ name: 'updateclient', params: { id: clientID } })
+    },
+    eventDelete() {
+      axios.delete(`${apiURL}/events/${this.id}`).then(() => {
+        alert('Event has been deleted.')
+        this.$router.push({ name: 'findevents' })
+      })
+    }
+  },
+  validations() {
+    return {
+      event: {
+        name: { required },
+        date: { required }
       }
     }
   }
-  </script>
+}
+</script>
   <template>
     <main>
       <div>
@@ -174,19 +170,18 @@
             <div class="flex flex-col">
             <label class="font-medium text-gray-700 mb-2">Services Offered at Event</label>
             <div class="flex flex-col">
-              <template v-for="service in event.services" :key="service._id">
-                <label :for="service._id" class="inline-flex items-center">
+              <div v-for="service in event.services" :key="service._id">
+                <!-- <label :for="service._id" class="inline-flex items-center"> -->
                   <input
                     type="checkbox"
-                    :id="service._id"
                     :value="service"
                     v-model="event.services"
-                    :checked="checkboxValue(service)"
+                    :checked="service.checked"
                     class="form-checkbox rounded-md text-indigo-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   />
                   <span class="ml-2 text-gray-700">{{ service.name }}</span>
-                </label>
-              </template>
+                <!-- </label> -->
+              </div>
             </div>
           </div>
           </div>
