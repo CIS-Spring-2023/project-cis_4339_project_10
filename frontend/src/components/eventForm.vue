@@ -39,7 +39,7 @@ export default {
         axios
           .post(`${apiURL}/events`, this.event)
           .then((response) => {
-            console.log(response)
+            console.log('HIIIIIIIIIIIIIIIIIII',response)
             alert('Event has been added.')
             this.$router.push({ name: 'findevents' })
           })
@@ -60,6 +60,7 @@ export default {
     return {
       event: {
         name: { required },
+        services: { required },
         date: { required }
       }
     }

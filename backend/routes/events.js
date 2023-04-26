@@ -18,7 +18,7 @@ router.get('/', (req, res, next) => {
     })
     // sort by date ascending
     .sort({ date: 1 })
-    .limit(10)
+    .limit(100)
 })
 
 // GET single event by ID
@@ -88,6 +88,7 @@ router.get('/attendance', (req, res, next) => {
 // POST new event
 router.post('/', (req, res, next) => {
   const newEvent = req.body
+  console.log('NEWREQBODY',req.body)
   newEvent.org = org
   events.create(newEvent, (error, data) => {
     if (error) {

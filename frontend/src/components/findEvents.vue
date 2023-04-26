@@ -6,15 +6,19 @@ const apiURL = import.meta.env.VITE_ROOT_API
 export default {
   data() {
     return {
+      newService: {
+        name: '',
+        description: '',
+        status: false,
+      },
       events: [],
       // Parameter for search to occur
       searchBy: '',
       name: '',
-      eventDate: ''
-    }
-  },
-  mounted() {
-    this.getEvents()
+      eventDate: '',
+      services: [],
+      serviceNames: {},
+    };
   },
   methods: {
     // better formattedDate
@@ -37,13 +41,39 @@ export default {
         this.events = res.data
       })
     },
-    // abstracted method to get events
-    getEvents() {
+    // abstract get clients call
+    async getEvents() {
       axios.get(`${apiURL}/events`).then((res) => {
-        this.events = res.data
+        this.events = res.data;
+        // Add eventServices to each event object
+        this.events.forEach((event) => {
+          event.eventServices = this.services.filter((service) =>
+          event.services.includes(service._id)
+          )
+        })
+        this.events.forEach((event) => {
+        event.eventServices.forEach((service) => {
+        console.log('servicenamedood',service.name);
+        })
+        })
       })
       window.scrollTo(0, 0)
     },
+    // async fetchServices() {
+    //   try {
+    //     const { data } = await axios.get(`${apiURL}/services`);
+    //     this.services = data;
+    //        // Create a mapping of service ids to service names
+    //   this.serviceNames = this.services.reduce((acc, service) => {
+    //   acc[service.id] = service.name;
+    //   return acc;
+    // }, {});
+    //   } catch (error) {
+    //     console.error(error);
+    //     alert('Failed to fetch services.');
+    //   }
+    // },
+
     clearSearch() {
       // Resets all the variables
       this.searchBy = ''
@@ -55,7 +85,11 @@ export default {
     editEvent(eventID) {
       this.$router.push({ name: 'eventdetails', params: { id: eventID } })
     }
-  }
+  },
+  created() {
+    // this.fetchServices();
+    this.getEvents();
+  },
 }
 </script>
 
@@ -144,6 +178,7 @@ export default {
               <th class="p-4 text-left">Event Name</th>
               <th class="p-4 text-left">Event Date</th>
               <th class="p-4 text-left">Event Address</th>
+              <th class="p-4 text-left">Event Service</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-300">
@@ -155,6 +190,10 @@ export default {
               <td class="p-2 text-left">{{ event.name }}</td>
               <td class="p-2 text-left">{{ formattedDate(event.date) }}</td>
               <td class="p-2 text-left">{{ event.address.line1 }}</td>
+              <!-- <td class="p-2 text-left">{{ serviceNames[service._id]}}</td> -->
+              <ul>
+                <li v-for="serviceName in event.eventServices" :key="serviceName">{{ serviceName }}</li>
+              </ul>
             </tr>
           </tbody>
         </table>
