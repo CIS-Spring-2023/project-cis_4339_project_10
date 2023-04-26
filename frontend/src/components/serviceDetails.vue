@@ -129,7 +129,7 @@ export default {
               type="submit"
               class="bg-green-700 text-white rounded"
             >
-              Update Event
+              Update Service
             </button>
           </div>
           <div class="flex justify-between mt-10 mr-20">
@@ -138,7 +138,7 @@ export default {
               type="submit"
               class="bg-red-700 text-white rounded"
             >
-              Delete Event
+              Delete Service
             </button>
           </div>
           <div class="flex justify-between mt-10 mr-20">
@@ -159,7 +159,7 @@ export default {
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
         >
           <div>
-            <h2 class="text-2xl font-bold">List of Attendees</h2>
+            <h2 class="text-2xl font-bold">List of Event Services</h2>
             <h3 class="italic">Click table row to edit/display an entry</h3>
           </div>
           <div class="flex flex-col col-span-2">
@@ -168,7 +168,6 @@ export default {
                 <tr>
                   <th class="p-4 text-left">Name</th>
                   <th class="p-4 text-left">City</th>
-                  <th class="p-4 text-left">Phone Number</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-300">
