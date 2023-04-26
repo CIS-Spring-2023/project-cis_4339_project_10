@@ -27,13 +27,12 @@ export default {
         description: '',
         attendees: []
       },
-      services:[]
+      services: []
     }
   },
   computed:{
   },
   mounted() {
-    this.getServices()
   },
   created() {
     axios.get(`${apiURL}/events/id/${this.$route.params.id}`).then((res) => {
@@ -42,7 +41,10 @@ export default {
       this.event.attendees.forEach((e) => {
         axios.get(`${apiURL}/clients/id/${e}`).then((res) => {
           this.clientAttendees.push(res.data)
+          axios.get(`${apiURL}/services/id/$${this.$route.params.id}`).then((res) => {
+            this.services = res.data.map(service => ({ ...service, selected: true }))
         })
+      })
       })
     })
   },
@@ -56,13 +58,12 @@ export default {
         .setZone(DateTime.now().zoneName, { keepLocalTime: true })
         .toISODate()
     },
-    async getServices() {
-      axios.get(`${apiURL}/services`).then((res) => {
-        this.services = res.data.map(service => ({ ...service, selected: this.event.services.includes(service) }))
-        this.services.forEach(service => { service.selected = false })
-      })
-      window.scrollTo(0, 0)
-    },
+    // async getServices() {
+    //   axios.get(`${apiURL}/services`).then((res) => {
+    //     this.services = res.data.map(service => ({ ...service, selected: true }))
+    //   })
+    //   window.scrollTo(0, 0)
+    // },
     handleEventUpdate() {
       axios.put(`${apiURL}/events/update/${this.id}`, this.event).then(() => {
         alert('Update has been saved.')
@@ -99,7 +100,7 @@ export default {
         </h1>
       </div>
       <div class="px-10 py-20">
-        <form @submit.prevent="handleSubmitForm">
+        <form @submit.prevent="handleEventUpdate">
           <div
             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
           >
@@ -170,13 +171,13 @@ export default {
             <div class="flex flex-col">
             <label class="font-medium text-gray-700 mb-2">Services Offered at Event</label>
             <div class="flex flex-col">
-              <div v-for="service in event.services" :key="service._id">
+              <div v-for="(service, index) in services" :key="service._id">
                 <!-- <label :for="service._id" class="inline-flex items-center"> -->
                   <input
                     type="checkbox"
                     :value="service"
-                    v-model="event.services"
-                    :checked="service.checked"
+                    v-model="service.selected"
+                    @change="services[index].selected = $event.target.checked"
                     class="form-checkbox rounded-md text-indigo-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   />
                   <span class="ml-2 text-gray-700">{{ service.name }}</span>

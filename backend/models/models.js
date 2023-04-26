@@ -17,7 +17,16 @@ const serviceDataSchema = new Schema(
     status: {
       type: String,
       required: true
-    }
+    },
+    events: [
+      {
+        _id: { type: String, default: uuid.v1 },
+        name: {
+          type:String,
+          required:true
+        },
+      },
+    ],
   },
   {
     collection: 'service'
