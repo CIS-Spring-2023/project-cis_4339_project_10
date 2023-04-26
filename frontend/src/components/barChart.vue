@@ -16,29 +16,38 @@ export default {
       e.replace(/[\d\.]+\)$/g, '1)')
     )
     await new Chart(this.$refs.attendanceChart, {
-      //pie type
-      type: 'pie',
+      type: 'bar',
       data: {
-        //labels on the pie chart
-        labels: ['Events', 'Attendees', 'Employees'],
+        labels: this.label,
         datasets: [
           {
-            borderWidth: 2,
-            //color of the pie chart
-            backgroundColor: ['#28536B', '#C2948A', '#7EA8BE'],
-            //the data inside the pie chart
-            data: [60, 242, 20]
+            borderWidth: 1,
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            data: this.chartData
           }
         ]
       },
       options: {
+        scales: {
+          y: {
+            ticks: {
+              stepSize: 1
+            }
+          },
+          x: {
+            gridLines: {
+              display: true
+            }
+          }
+        },
         plugins: {
           legend: {
-            display: false
+            display: true
           }
         },
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: true
       }
     })
   },
@@ -52,6 +61,6 @@ export default {
 </script>
 <template>
   <div class="shadow-lg rounded-lg overflow-hidden">
-    <canvas class="p-5" ref="attendanceChart"></canvas>
+    <canvas class="p-10" ref="attendanceChart"></canvas>
   </div>
 </template>

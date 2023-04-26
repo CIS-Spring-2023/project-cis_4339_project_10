@@ -14,7 +14,7 @@ export default {
       labels: [],
       chartData: [],
       loading: false,
-      error: null
+      error: null,
     }
   },
   mounted() {
@@ -54,6 +54,7 @@ export default {
       }
       this.loading = false
     },
+
     formattedDate(datetimeDB) {
       const dt = DateTime.fromISO(datetimeDB, {
         zone: 'utc'
