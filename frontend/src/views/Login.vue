@@ -1,43 +1,66 @@
 <template>
-    <div class="login-container">
-          <div class="login-card">
-              <h3 class="login-title">Login</h3>
-              <form class="login-form" @submit.prevent="store.login(username, password)" novalidate="true">
-                  <div class="form-group">
-                      <label>Username: </label>
-                      <input type="text" class="form-control" v-model="username" placeholder="username" required>
-                  </div>
-                  <div class="form-group">
-                      <label>Password: </label>
-                      <input type="password" class="form-control" v-model="password" placeholder="password" required>
-                  </div>
-                  <button class="login-button">Submit</button>
-              </form>
-          </div>
+  <div class="login-container">
+    <div class="login-card">
+      <h3 class="login-title">Login</h3>
+      <form class="login-form" @submit.prevent="store.login(username, password)">
+        <div class="form-group">
+          <label>Username: </label>
+          <input type="text" class="form-control" v-model="username" placeholder="username" required>
+        </div>
+        <div class="form-group">
+          <label>Password: </label>
+          <input type="password" class="form-control" v-model="password" placeholder="password" required>
+        </div>
+        <button class="login-button">Submit</button>
+        <!-- Add the error message element here -->
+        <div v-if="store.errorMessage" class="error-message">{{ store.errorMessage }}</div>
+      </form>
     </div>
-  </template>
+  </div>
+</template>
   
-  <script>
-  import { useLoggedInUserStore } from "@/store/loggedInUser";
-  
-  export default {
-    data: () => {
-      return {
-        username: "",
-        password: "",
-      };
-    },
-    setup() {
-      const store = useLoggedInUserStore()
-      return {
-        // you can return the whole store instance to use it in the template
-        store,
+<script>
+import { useLoggedInUserStore } from "@/store/loggedInUser";
+import axios from "axios";
+const apiURL = import.meta.env.VITE_ROOT_API;
+
+export default {
+  data: () => {
+    return {
+      username: "",
+      password: "",
+    };
+  },
+  setup() {
+    const store = useLoggedInUserStore();
+    return {
+      store,
+    };
+  },
+  created() {
+    this.fetchData();
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const response = await axios.get(`${apiURL}/org`); // Replace "/org" with the correct endpoint
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
       }
-    }
-  };
-  </script>
+    },
+  },
+};
+</script>
+
+
 
 <style>
+.error-message {
+  color: red;
+  margin-top: 10px;
+  /* Adjust the value to control the spacing */
+}
 
 .login-container {
   display: flex;
@@ -70,6 +93,7 @@
 .form-group {
   margin-bottom: 20px;
 }
+
 .login-button {
   display: inline-block;
   width: 100%;
