@@ -2,8 +2,6 @@
   import axios from 'axios'
   import { useLoggedInUserStore } from '@/store/loggedInUser'
   const apiURL = import.meta.env.VITE_ROOT_API
-  console.log('fuckkkkkkkumore',import.meta.env.VITE_ROOT_API)
-  console.log('fuckuuuuuuuuuuuuuu',apiURL)
 
   export default {
     name: 'App',

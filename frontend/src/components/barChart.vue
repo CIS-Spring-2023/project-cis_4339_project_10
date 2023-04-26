@@ -37,7 +37,7 @@ export default {
           },
           x: {
             gridLines: {
-              display: true
+              display: false
             }
           }
         },

@@ -14,7 +14,7 @@ export default {
   mounted() {
     const pieBackgroundColor = this.chartData.map(() => this.getColor())
 
-    new Chart(this.$refs.pieChart, {
+    new Chart(this.$refs.myChart, {
       type: 'doughnut',
       data: {
         labels: this.label,
@@ -32,7 +32,7 @@ export default {
           }
         },
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
       }
     }
     );
@@ -46,8 +46,9 @@ export default {
   }
 }
 </script>
+
 <template>
   <div class="shadow-lg rounded-lg h-96">
-    <canvas class="p-15" ref="pieChart"></canvas>
+    <canvas class="p-15" ref="myChart"></canvas>
   </div>
 </template>

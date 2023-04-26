@@ -2,11 +2,13 @@
 import { DateTime } from 'luxon'
 import axios from 'axios'
 import AttendanceChart from './barChart.vue'
+import ClientChart from './pieChart.vue'
 const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
   components: {
-    AttendanceChart
+    AttendanceChart,
+    ClientChart
   },
   data() {
     return {
@@ -14,11 +16,15 @@ export default {
       labels: [],
       chartData: [],
       loading: false,
+      pieLoading: false,
       error: null,
+      pielabels: [],
+      pieData: []
     }
   },
   mounted() {
     this.getAttendanceData()
+    this.clientByZip()
   },
   methods: {
     async getAttendanceData() {
@@ -53,6 +59,18 @@ export default {
         }
       }
       this.loading = false
+    },
+
+    async clientByZip() {
+      try {
+        const res = await axios.get(`${apiURL}/clients/zip`)
+        this.pieLoading = true
+        this.pielabels = res.data.map((zip) => zip._id)
+        this.pieData = res.data.map((num) => num.count)
+        console.log(this.pielabels)
+      } catch(err) {
+        console.log(err)
+      }
     },
 
     formattedDate(datetimeDB) {
@@ -122,7 +140,6 @@ export default {
             <!-- End of loading animation -->
             
             <!-- Start of error alert -->
-            <!--
             <div class="mt-12 bg-red-50" v-if="error">
               <h3 class="px-4 py-1 text-4xl font-bold text-white bg-red-800">
                 {{ error.title }}
@@ -131,9 +148,33 @@ export default {
                 {{ error.message }}
               </p>
             </div>
-            -->
             <!-- End of error alert -->
           </div>
+
+          <table class="min-w-full shadow-md rounded">
+            <thead class="bg-gray-50 text-xl">
+              <tr class="p-4 text-left">
+                <th class="p-4 text-left">Zip Code</th>
+                <th class="p-4 text-left">Number of Clients</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-300">
+              <tr
+              v-for="zips, i in pielabels"
+              >
+              <td class="p-2 text-left">{{ zips }}</td>
+              <td class="p-2 text-left">{{ pieData[i] }}</td>
+            </tr>
+            </tbody>
+          </table>
+          <div>
+            <ClientChart
+            v-if="pieLoading"
+            :label="pielabels"
+            :chart-data="pieData">
+          </ClientChart>
+          </div>
+
         </div>
       </div>
     </div>

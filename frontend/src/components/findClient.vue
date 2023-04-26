@@ -148,6 +148,7 @@ export default {
               <th class="p-4 text-left">Name</th>
               <th class="p-4 text-left">Phone number</th>
               <th class="p-4 text-left">City</th>
+              <th class="p-4 text-left">Zipcode</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-300">
@@ -162,7 +163,10 @@ export default {
               <td class="p-2 text-left">
                 {{ client.phoneNumber.primary }}
               </td>
-              <td class="p-2 text-left">{{ client.address.city }}</td>
+              <td class="p-2 text-left">{{ client.address.city }}
+              </td>
+              <td class="p-2 text-left">{{ client.address.zip }}
+              </td>
             </tr>
           </tbody>
         </table>
