@@ -11,12 +11,20 @@ export default {
         description: '',
         status: false,
       },
-      events: [],
+      events: [
+        {
+      services: [
+        {
+          _id: '',
+          name: '',
+        }
+      ]
+        }
+      ],
       // Parameter for search to occur
       searchBy: '',
       name: '',
       eventDate: '',
-      services: [],
       serviceNames: {},
     };
   },
@@ -51,11 +59,11 @@ export default {
           event.services.includes(service._id)
           )
         })
-        this.events.forEach((event) => {
-        event.eventServices.forEach((service) => {
-        console.log('servicenamedood',service.name);
-        })
-        })
+        // this.events.forEach((event) => {
+        // event.eventServices.forEach((service) => {
+        // console.log('servicenamedood',service.name);
+        // })
+        // })
       })
       window.scrollTo(0, 0)
     },
@@ -191,9 +199,11 @@ export default {
               <td class="p-2 text-left">{{ formattedDate(event.date) }}</td>
               <td class="p-2 text-left">{{ event.address.line1 }}</td>
               <!-- <td class="p-2 text-left">{{ serviceNames[service._id]}}</td> -->
+              <td class="p-2 text-left">
               <ul>
-                <li v-for="serviceName in event.eventServices" :key="serviceName">{{ serviceName }}</li>
+                <li v-for="service in event.services" :key="service._id">{{ service.name }}</li>
               </ul>
+            </td>
             </tr>
           </tbody>
         </table>
