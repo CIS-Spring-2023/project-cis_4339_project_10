@@ -28,12 +28,13 @@
           attendees: []
         },
         services:[]
+        
       }
     },
-    computed: {
-    allSelected() {
-      return this.event.services.length === this.services.length;
-    }
+    computed:{
+    checkboxValue() {
+      return (service) => this.event.services.includes(service);
+    },
   },
     mounted() {
     this.getServices()
@@ -171,24 +172,24 @@
             <div></div>
             <!-- form field -->
             <div class="flex flex-col">
-  <label class="font-medium text-gray-700 mb-2">Services Offered at Event</label>
-  <div class="flex flex-col">
-    <template v-for="(service, index) in services" :key="index">
-      <label :for="service._id" class="inline-flex items-center">
-        <input
-          type="checkbox"
-          :id="service._id"
-          :value="service"
-          v-model="event.services"
-          :checked="allSelected"
-          class="form-checkbox rounded-md text-indigo-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        />
-        <span class="ml-2 text-gray-700">{{ service.name }}</span>
-      </label>
-    </template>
-  </div>
-</div>
-</div>
+            <label class="font-medium text-gray-700 mb-2">Services Offered at Event</label>
+            <div class="flex flex-col">
+              <template v-for="service in event.services" :key="service._id">
+                <label :for="service._id" class="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    :id="service._id"
+                    :value="service"
+                    v-model="event.services"
+                    :checked="checkboxValue(service)"
+                    class="form-checkbox rounded-md text-indigo-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  />
+                  <span class="ml-2 text-gray-700">{{ service.name }}</span>
+                </label>
+              </template>
+            </div>
+          </div>
+          </div>
 
           <!-- grid container -->
           <div

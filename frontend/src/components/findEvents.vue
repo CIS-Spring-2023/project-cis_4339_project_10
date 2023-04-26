@@ -13,12 +13,12 @@ export default {
       },
       events: [
         {
-      services: [
-        {
-          _id: '',
-          name: '',
-        }
-      ]
+          services: [
+            {
+              _id: '',
+              name: '',
+            }
+          ]
         }
       ],
       // Parameter for search to occur
@@ -26,6 +26,8 @@ export default {
       name: '',
       eventDate: '',
       serviceNames: {},
+      services: [], // define the services array
+      events: []
     };
   },
   methods: {
@@ -49,38 +51,30 @@ export default {
         this.events = res.data
       })
     },
-    // abstract get clients call
-    async getEvents() {
-      axios.get(`${apiURL}/events`).then((res) => {
-        this.events = res.data;
-        // Add eventServices to each event object
+   async getEvents() {
+      try {
+        const servicesRes = await axios.get(`${apiURL}/services`);
+        const eventsRes = await axios.get(`${apiURL}/events`);
+  
+        this.services = servicesRes.data;
+        this.events = eventsRes.data;
+  
         this.events.forEach((event) => {
-          event.eventServices = this.services.filter((service) =>
-          event.services.includes(service._id)
-          )
-        })
-        // this.events.forEach((event) => {
-        // event.eventServices.forEach((service) => {
-        // console.log('servicenamedood',service.name);
-        // })
-        // })
-      })
+          const uniqueServices = [];
+          event.services.forEach((serviceId) => {
+            const service = this.services.find((s) => s._id === serviceId);
+            if (service && !uniqueServices.some((s) => s._id === service._id)) {
+              uniqueServices.push(service);
+            }
+          });
+          event.eventServices = uniqueServices;
+        });
+      } catch(error)  {
+        console.error(error);
+        alert('Failed to fetch services.');
+      }
       window.scrollTo(0, 0)
     },
-    // async fetchServices() {
-    //   try {
-    //     const { data } = await axios.get(`${apiURL}/services`);
-    //     this.services = data;
-    //        // Create a mapping of service ids to service names
-    //   this.serviceNames = this.services.reduce((acc, service) => {
-    //   acc[service.id] = service.name;
-    //   return acc;
-    // }, {});
-    //   } catch (error) {
-    //     console.error(error);
-    //     alert('Failed to fetch services.');
-    //   }
-    // },
 
     clearSearch() {
       // Resets all the variables
@@ -95,7 +89,6 @@ export default {
     }
   },
   created() {
-    // this.fetchServices();
     this.getEvents();
   },
 }
@@ -198,7 +191,6 @@ export default {
               <td class="p-2 text-left">{{ event.name }}</td>
               <td class="p-2 text-left">{{ formattedDate(event.date) }}</td>
               <td class="p-2 text-left">{{ event.address.line1 }}</td>
-              <!-- <td class="p-2 text-left">{{ serviceNames[service._id]}}</td> -->
               <td class="p-2 text-left">
               <ul>
                 <li v-for="service in event.services" :key="service._id">{{ service.name }}</li>
