@@ -169,13 +169,14 @@ export default {
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-300">
-            <tr @click="(user.role === 'editor') ? editEvent(event._id) : null" v-for="event in events" :key="event._id">
+            <tr @click="(user.role === 'editor') ? editEvent(event._id) : null" v-for="event in events" 
+            :key="event._id">
               <td class="p-2 text-left">{{ event.name }}</td>
               <td class="p-2 text-left">{{ formattedDate(event.date) }}</td>
-              <td class="p-2 text-left">{{ event.address.line1 }}</td>
+              <td class="p-2 text-left">{{ event.address.city }}</td>
               <td class="p-2 text-left">
                 <ul>
-                  <li v-for="serviceName in event.services" :key="serviceName">
+                  <li v-for="serviceName in event.services" :id="`service._id`" :key="serviceName._id">
                     {{ serviceName }}</li>
                 </ul>
               </td>
