@@ -20,9 +20,9 @@ export default {
           line2: '',
           city: '',
           county: '',
-          zip: ''
+          zip: '',
+          description: ''
         },
-        description: ''
       },
       services:[]
     }

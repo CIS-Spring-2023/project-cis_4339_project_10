@@ -1,6 +1,7 @@
 <script>
 import { Chart, registerables } from 'chart.js'
 Chart.register(...registerables)
+
 export default {
   props: {
     label: {
@@ -10,21 +11,17 @@ export default {
       type: Array
     }
   },
-  async mounted() {
+  mounted() {
     const backgroundColor = this.chartData.map(() => this.getColor())
-    const borderColor = backgroundColor.map((e) =>
-      e.replace(/[\d\.]+\)$/g, '1)')
-    )
-    await new Chart(this.$refs.attendanceChart, {
+    new Chart(this.$refs.attendanceChart, {
       type: 'bar',
       data: {
         labels: this.label,
         datasets: [
           {
+            data: this.chartData,
             borderWidth: 1,
-            backgroundColor: backgroundColor,
-            borderColor: borderColor,
-            data: this.chartData
+            backgroundColor: backgroundColor
           }
         ]
       },
@@ -43,13 +40,13 @@ export default {
         },
         plugins: {
           legend: {
-            display: true
+            display: false
           }
         },
         responsive: true,
-        maintainAspectRatio: true
-      }
-    })
+        maintainAspectRatio: false
+        }
+      })
   },
   methods: {
     getColor() {

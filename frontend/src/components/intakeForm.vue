@@ -301,7 +301,7 @@ export default {
               <span class="text-gray-700">Zip Code</span>
               <span style="color: #ff0000">*</span>
               <input
-                type="text"
+                type="number"
                 class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 v-model="client.address.zip"
               />

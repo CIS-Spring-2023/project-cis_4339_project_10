@@ -180,6 +180,7 @@ export default {
               <th class="p-4 text-left">Event Date</th>
               <th class="p-4 text-left">Event Address</th>
               <th class="p-4 text-left">Event Service</th>
+              <th class="p-4 text-left">Event Attendees</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-300">
@@ -196,6 +197,7 @@ export default {
                 <li v-for="service in event.services" :key="service._id">{{ service.name }}</li>
               </ul>
             </td>
+              <td class="p-2 text-left">{{ event.attendees.length }}</td>
             </tr>
           </tbody>
         </table>
