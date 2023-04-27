@@ -3,6 +3,7 @@ import { DateTime } from 'luxon'
 import axios from 'axios'
 import AttendanceChart from './barChart.vue'
 import ClientChart from './pieChart.vue'
+import { useLoggedInUserStore } from '@/store/loggedInUser';
 const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
@@ -21,6 +22,10 @@ export default {
       pielabels: [],
       pieData: []
     }
+  },
+  setup() {
+    const user = useLoggedInUserStore();
+    return { user };
   },
   mounted() {
     this.getAttendanceData()
@@ -68,7 +73,7 @@ export default {
         this.pielabels = res.data.map((zip) => zip._id)
         this.pieData = res.data.map((num) => num.count)
         console.log(this.pielabels)
-      } catch(err) {
+      } catch (err) {
         console.log(err)
       }
     },
@@ -92,15 +97,11 @@ export default {
 <template>
   <main>
     <div>
-      <h1
-        class="font-bold text-4xl text-red-700 tracking-widest text-center mt-10"
-      >
+      <h1 class="font-bold text-4xl text-red-700 tracking-widest text-center mt-10">
         Welcome
       </h1>
       <br />
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
-      >
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
         <div class="ml-10"></div>
         <div class="flex flex-col col-span-2">
           <table class="min-w-full shadow-md rounded">
@@ -112,33 +113,26 @@ export default {
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-300">
-              <tr
-                @click="editEvent(event._id)"
-                v-for="event in recentEvents"
-                :key="event._id"
-              >
+              <tr @click="(user.role === 'editor') ? editEvent(event._id) : null" v-for="event in recentEvents"
+                :key="event._id">
+
                 <td class="p-2 text-left">{{ event.name }}</td>
                 <td class="p-2 text-left">{{ formattedDate(event.date) }}</td>
                 <td class="p-2 text-left">{{ event.attendees.length }}</td>
               </tr>
             </tbody>
           </table>
-          <div> 
-            <AttendanceChart
-              :label="labels"
-              :chart-data="chartData"
-            ></AttendanceChart>
+          <div>
+            <AttendanceChart :label="labels" :chart-data="chartData"></AttendanceChart>
 
             <!-- Start of loading animation -->
             <div class="mt-40" v-if="loading">
-              <p
-                class="text-6xl font-bold text-center text-gray-500 animate-pulse"
-              >
+              <p class="text-6xl font-bold text-center text-gray-500 animate-pulse">
                 Loading...
               </p>
             </div>
             <!-- End of loading animation -->
-            
+
             <!-- Start of error alert -->
             <div class="mt-12 bg-red-50" v-if="error">
               <h3 class="px-4 py-1 text-4xl font-bold text-white bg-red-800">
@@ -159,20 +153,15 @@ export default {
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-300">
-              <tr
-              v-for="zips, i in pielabels"
-              >
-              <td class="p-2 text-left">{{ zips }}</td>
-              <td class="p-2 text-left">{{ pieData[i] }}</td>
-            </tr>
+              <tr v-for="zips, i in pielabels">
+                <td class="p-2 text-left">{{ zips }}</td>
+                <td class="p-2 text-left">{{ pieData[i] }}</td>
+              </tr>
             </tbody>
           </table>
           <div>
-            <ClientChart
-            v-if="pieLoading"
-            :label="pielabels"
-            :chart-data="pieData">
-          </ClientChart>
+            <ClientChart v-if="pieLoading" :label="pielabels" :chart-data="pieData">
+            </ClientChart>
           </div>
 
         </div>
