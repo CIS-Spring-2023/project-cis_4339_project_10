@@ -41,7 +41,6 @@ export default {
     }
     axios.get(`${apiURL}/events/id/${this.$route.params.id}`).then((res) => {
       this.event = res.data
-      console.log('EVENTTTTT',this.event)
       this.event.date = this.formattedDate(this.event.date)
       this.event.services = this.event.services || []
 
@@ -82,7 +81,7 @@ export default {
     handleEventUpdate() {
       axios.put(`${apiURL}/events/update/${this.id}`, this.event).then(() => {
         alert('Update has been saved.')
-        this.$router.back()
+        this.$router.push({ name: 'findevents' })
       })
     },
     editClient(clientID) {
@@ -116,7 +115,7 @@ export default {
         </h1>
       </div>
       <div class="px-10 py-20">
-        <form @submit.prevent="handleEventUpdate">
+        <form @submit.prevent="handleSubmitForm">
           <div
             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
           >

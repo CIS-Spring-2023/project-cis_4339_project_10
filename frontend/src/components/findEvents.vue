@@ -28,7 +28,10 @@ export default {
       eventDate: '',
       serviceNames: {},
       services: [], // define the services array
-      events: []
+      events: [
+        {
+          _id: '',        }
+      ]
     };
   },
   setup() {
@@ -58,29 +61,30 @@ export default {
     },
     async getEvents() {
       try {
-        const servicesRes = await axios.get(`${apiURL}/services`);
+        const response = await axios.get(`${apiURL}/services`);
+        this.services = response.data.filter(
+        (service) => service.status === 'Active'
+      )
         const eventsRes = await axios.get(`${apiURL}/events`);
 
-        this.services = servicesRes.data;
         this.events = eventsRes.data;
 
         this.events.forEach((event) => {
-          const uniqueServices = [];
-          event.services.forEach((serviceId) => {
-            const service = this.services.find((s) => s._id === serviceId);
-            if (service && !uniqueServices.some((s) => s._id === service._id)) {
-              uniqueServices.push(service);
-            }
-          });
-          event.eventServices = uniqueServices;
-        });
+        const eventServices = this.services.filter(
+        (service) => service.eventId === event._id
+      );
+      if (eventServices.length > 0) {
+        event.services = eventServices.map((service) => service.name);
+      }
+    });
+
       } catch (error) {
         console.error(error);
         alert('Failed to fetch services.');
       }
       window.scrollTo(0, 0)
     },
-
+    
     clearSearch() {
       // Resets all the variables
       this.searchBy = ''
@@ -171,7 +175,8 @@ export default {
               <td class="p-2 text-left">{{ event.address.line1 }}</td>
               <td class="p-2 text-left">
                 <ul>
-                  <li v-for="service in services" :key="service._id">{{ service.name }}</li>
+                  <li v-for="serviceName in event.services" :key="serviceName">
+                    {{ serviceName }}</li>
                 </ul>
               </td>
               <td class="p-2 text-left">{{ event.attendees.length }}</td>
