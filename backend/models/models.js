@@ -18,15 +18,6 @@ const serviceDataSchema = new Schema(
       type: String,
       required: true
     },
-    events: [
-      {
-        _id: { type: String, default: uuid.v1 },
-        name: {
-          type:String,
-          required:true
-        },
-      },
-    ],
   },
   {
     collection: 'service'
@@ -119,12 +110,8 @@ const eventDataSchema = new Schema(
     },
     services: [
       {
-        _id: { type: String, default: uuid.v1 },
-        name: {
-          type:String,
-          required:true
-        },
-      },
+        type: String
+      }
     ],
     date: {
       type: Date,

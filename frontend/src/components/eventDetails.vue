@@ -30,32 +30,43 @@ export default {
       services: []
     }
   },
-  created() {
+  async created() {
+    try {
+      const response = await axios.get(`${apiURL}/services`)
+      this.services = response.data.filter(
+        (service) => service.status === 'Active'
+      )
+    } catch (error) {
+      console.error('Error fetching active services:', error)
+    }
     axios.get(`${apiURL}/events/id/${this.$route.params.id}`).then((res) => {
       this.event = res.data
+      console.log('EVENTTTTT',this.event)
       this.event.date = this.formattedDate(this.event.date)
+      this.event.services = this.event.services || []
 
       const clientRequests = this.event.attendees.map((e) => {
         return axios.get(`${apiURL}/clients/id/${e}`).then((res) => {
           this.clientAttendees.push(res.data)
         })
       })
+    // axios.get(`${apiURL}/services${this.$route.params.id}`)
+    //   console.log('URL',apiURL);
+    //   axios.get(apiURL).then((res) => {
 
-      const serviceRequest = axios.get(`${apiURL}/services/event/${this.$route.params.id}`).then((res) => {
-        this.services = res.data.map(service => {
-          // set the selected property to true for services that are selected for the event
-          const isSelected = this.event.services.includes(service._id)
-          console.log('IPROMISE',isSelected)
-          return { ...service, selected: isSelected }
-        })
+    //   this.services = res.data;
+    //   console.log('respojnseeeeee',res.data)
 
-        // add a selected property with a default value of false for each service
-        this.services = this.services.map(service => ({ ...service, selected: false }))
-      })
-
-      Promise.all([...clientRequests, serviceRequest]).then(() => {
-        // Do something after all requests have completed
-      })
+    //   this.services.forEach((service) => {
+    //     if (this.event.services.includes(service._id)) {
+    //       console.log('Servicesarraytocheckselectedwhatsselected?',service)
+    //       service.selected = true;
+    //     }
+    //   });
+    .catch(error => {
+      console.log(error);
+    });
+    console.log('IDDDDDDDDDD',this.$route.params.id)
     })
   },
   methods: {
@@ -94,6 +105,7 @@ export default {
   }
 }
 </script>
+
   <template>
     <main>
       <div>
@@ -172,21 +184,19 @@ export default {
             <div></div>
             <div></div>
             <!-- form field -->
-            <div class="flex flex-col">
-            <label class="font-medium text-gray-700 mb-2">Services Offered at Event</label>
-            <div class="flex flex-col">
-              <div v-for="(service, index) in event.services" :key="service._id">
-                <!-- <label :for="service._id" class="inline-flex items-center"> -->
-                  <input
-                    type="checkbox"
-                    :value="service"
-                    v-model="service.selected"
-                    @change="services[index].selected = $event.target.checked"
-                    class="form-checkbox rounded-md text-indigo-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  />
-                  <span class="ml-2 text-gray-700">{{ this.serviceRequest }}</span>
-                <!-- </label> -->
-              </div>
+            <div class="flex flex-col grid-cols-3">
+            <label>Services Offered at Event</label>
+            <div v-for="service in services" :key="service._id">
+              <label class="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  :id="`service._id`"
+                  :value="service._id"
+                  v-model="event.services"
+                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+                <span class="ml-2">{{ service.name }}</span>
+              </label>
             </div>
           </div>
           </div>

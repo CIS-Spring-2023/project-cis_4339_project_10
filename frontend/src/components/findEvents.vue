@@ -193,7 +193,7 @@ export default {
               <td class="p-2 text-left">{{ event.address.line1 }}</td>
               <td class="p-2 text-left">
               <ul>
-                <li v-for="service in event.services" :key="service._id">{{ service.name }}</li>
+                <li v-for="service in services" :key="service._id">{{ service.name }}</li>
               </ul>
             </td>
             </tr>
