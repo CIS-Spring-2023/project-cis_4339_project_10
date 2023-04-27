@@ -30,21 +30,31 @@ export default {
       services: []
     }
   },
-  computed:{
-  },
-  mounted() {
-  },
   created() {
     axios.get(`${apiURL}/events/id/${this.$route.params.id}`).then((res) => {
       this.event = res.data
       this.event.date = this.formattedDate(this.event.date)
-      this.event.attendees.forEach((e) => {
-        axios.get(`${apiURL}/clients/id/${e}`).then((res) => {
+
+      const clientRequests = this.event.attendees.map((e) => {
+        return axios.get(`${apiURL}/clients/id/${e}`).then((res) => {
           this.clientAttendees.push(res.data)
-          axios.get(`${apiURL}/services/id/$${this.$route.params.id}`).then((res) => {
-            this.services = res.data.map(service => ({ ...service, selected: true }))
         })
       })
+
+      const serviceRequest = axios.get(`${apiURL}/services/event/${this.$route.params.id}`).then((res) => {
+        this.services = res.data.map(service => {
+          // set the selected property to true for services that are selected for the event
+          const isSelected = this.event.services.includes(service._id)
+          console.log('IPROMISE',isSelected)
+          return { ...service, selected: isSelected }
+        })
+
+        // add a selected property with a default value of false for each service
+        this.services = this.services.map(service => ({ ...service, selected: false }))
+      })
+
+      Promise.all([...clientRequests, serviceRequest]).then(() => {
+        // Do something after all requests have completed
       })
     })
   },
@@ -58,12 +68,6 @@ export default {
         .setZone(DateTime.now().zoneName, { keepLocalTime: true })
         .toISODate()
     },
-    // async getServices() {
-    //   axios.get(`${apiURL}/services`).then((res) => {
-    //     this.services = res.data.map(service => ({ ...service, selected: true }))
-    //   })
-    //   window.scrollTo(0, 0)
-    // },
     handleEventUpdate() {
       axios.put(`${apiURL}/events/update/${this.id}`, this.event).then(() => {
         alert('Update has been saved.')
@@ -171,7 +175,7 @@ export default {
             <div class="flex flex-col">
             <label class="font-medium text-gray-700 mb-2">Services Offered at Event</label>
             <div class="flex flex-col">
-              <div v-for="(service, index) in services" :key="service._id">
+              <div v-for="(service, index) in event.services" :key="service._id">
                 <!-- <label :for="service._id" class="inline-flex items-center"> -->
                   <input
                     type="checkbox"
@@ -180,7 +184,7 @@ export default {
                     @change="services[index].selected = $event.target.checked"
                     class="form-checkbox rounded-md text-indigo-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   />
-                  <span class="ml-2 text-gray-700">{{ service.name }}</span>
+                  <span class="ml-2 text-gray-700">{{ this.serviceRequest }}</span>
                 <!-- </label> -->
               </div>
             </div>
