@@ -117,6 +117,15 @@ export default {
             <label class="block flex flex-col">
               <span class="text-gray-700 font-normal">Name:</span>
               <input v-model="newService.name" type="text" />
+              <span class="text-black" v-if="v$.newService.name.$error">
+                <p
+                  class="text-red-700"
+                  v-for="error of v$.newService.name.$errors"
+                  :key="error.$uid"
+                >
+                  {{ error.$message }}!
+                </p>
+              </span>
             </label>
             <label class="block flex flex-col ml-6">
               <span class="text-gray-700">Description:</span>

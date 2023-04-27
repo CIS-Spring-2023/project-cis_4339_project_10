@@ -53,7 +53,7 @@ export default {
           },
           plugins: {
             legend: {
-              display: true
+              display: false
             }
           },
           responsive: true,
