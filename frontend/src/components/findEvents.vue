@@ -39,6 +39,8 @@ export default {
     return { user };
   },
   methods: {
+
+   
     // better formattedDate
     formattedDate(datetimeDB) {
       const dt = DateTime.fromISO(datetimeDB, {
@@ -164,7 +166,6 @@ export default {
               <th class="p-4 text-left">Event Name</th>
               <th class="p-4 text-left">Event Date</th>
               <th class="p-4 text-left">Event Address</th>
-              <th class="p-4 text-left">Event Service</th>
               <th class="p-4 text-left">Event Attendees</th>
             </tr>
           </thead>
@@ -173,14 +174,8 @@ export default {
             :key="event._id">
               <td class="p-2 text-left">{{ event.name }}</td>
               <td class="p-2 text-left">{{ formattedDate(event.date) }}</td>
-              <td class="p-2 text-left">{{ event.address.city }}</td>
-              <td class="p-2 text-left">
-                <ul>
-                  <li v-for="serviceName in event.services" :id="`service._id`" :key="serviceName._id">
-                    {{ serviceName }}</li>
-                </ul>
-              </td>
-              <td class="p-2 text-left">{{ event.attendees.length }}</td>
+              <td class="p-2 text-left">{{ event.address?.line1 }}</td>
+              <td class="p-2 text-left">{{ event.attendees?.length }}</td>
             </tr>
           </tbody>
         </table>

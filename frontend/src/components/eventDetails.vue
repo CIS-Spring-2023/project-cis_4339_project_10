@@ -43,6 +43,7 @@ export default {
       this.event = res.data
       this.event.date = this.formattedDate(this.event.date)
       this.event.services = this.event.services || []
+      console.log(this.event.services)
 
       const clientRequests = this.event.attendees.map((e) => {
         return axios.get(`${apiURL}/clients/id/${e}`).then((res) => {
