@@ -22,13 +22,7 @@ export default {
   created() {
     axios.get(`${apiURL}/services/id/${this.$route.params.id}`).then((res) => {
       this.service = res.data
-      // this.event.date = this.formattedDate(this.event.date)
-      // this.event.attendees.forEach((e) => {
-      //   axios.get(`${apiURL}/clients/id/${e}`).then((res) => {
-      //     this.clientAttendees.push(res.data)
         })
-    //   })
-    // })
   },
   methods: {
     // better formatted date, converts UTC to local time
@@ -46,9 +40,6 @@ export default {
         this.$router.back()
       })
     },
-    // editClient(clientID) {
-    //   this.$router.push({ name: 'updateclient', params: { id: clientID } })
-    // },
     ServiceDelete() {
       axios.delete(`${apiURL}/services/${this.$route.params.id}`).then(() => {
         alert('Event has been deleted.')
