@@ -26,12 +26,11 @@ export default {
       searchBy: '',
       name: '',
       eventDate: '',
-      serviceNames: {},
-      services: [], // define the services array
-      events: [
+      services: [
         {
-          _id: '',        }
-      ]
+          _id: ''
+        }
+      ], // define the services array
     };
   },
   setup() {
@@ -39,8 +38,6 @@ export default {
     return { user };
   },
   methods: {
-
-   
     // better formattedDate
     formattedDate(datetimeDB) {
       const dt = DateTime.fromISO(datetimeDB, {
@@ -62,30 +59,41 @@ export default {
       })
     },
     async getEvents() {
-      try {
-        const response = await axios.get(`${apiURL}/services`);
-        this.services = response.data.filter(
-        (service) => service.status === 'Active'
-      )
-        const eventsRes = await axios.get(`${apiURL}/events`);
+    try {
+    console.log("Fetching services...")
+    const response = await axios.get(`${apiURL}/services`);
+    console.log("Services fetched!",response)
+    
+    console.log("Filtering active services...")
+    this.services = response.data
+      .filter(service => service.status === 'Active')
+      .map(service => ({ _id: service._id, name: service.name }));
+    console.log("Active services filtered!",this.services)
+    
+    console.log("Fetching events...")
+    const response1 = await axios.get(`${apiURL}/events`);
+    console.log("Events fetched!",response1)
+    
+    this.events = response1.data;
 
-        this.events = eventsRes.data;
-
-        this.events.forEach((event) => {
-        const eventServices = this.services.filter(
-        (service) => service.eventId === event._id
+    console.log("Mapping event services...")
+    this.events.forEach((event) => {
+      const eventServices = this.services.filter(
+        (service) => event.services.some((s) => s._id === service._id)
       );
+
       if (eventServices.length > 0) {
-        event.services = eventServices.map((service) => service.name);
+        event.services = eventServices.map((service) => ({
+          _id: service._id,
+          name: service.name,
+          eventName: event.name
+        }));
       }
     });
-
-      } catch (error) {
-        console.error(error);
-        alert('Failed to fetch services.');
-      }
-      window.scrollTo(0, 0)
-    },
+  } catch (error) {
+    console.error(error);
+  }
+},
     
     clearSearch() {
       // Resets all the variables
@@ -166,6 +174,7 @@ export default {
               <th class="p-4 text-left">Event Name</th>
               <th class="p-4 text-left">Event Date</th>
               <th class="p-4 text-left">Event Address</th>
+              <th class="p-4 text-left">Event Service</th>
               <th class="p-4 text-left">Event Attendees</th>
             </tr>
           </thead>
@@ -174,8 +183,15 @@ export default {
             :key="event._id">
               <td class="p-2 text-left">{{ event.name }}</td>
               <td class="p-2 text-left">{{ formattedDate(event.date) }}</td>
-              <td class="p-2 text-left">{{ event.address?.line1 }}</td>
-              <td class="p-2 text-left">{{ event.attendees?.length }}</td>
+              <td class="p-2 text-left">{{ event.address.line1 }}</td>
+              <td class="p-2 text-left">
+                <ul>
+                  <li v-for="service in event.services" :key="service.id">
+                   <span>{{ service.name }}</span> 
+                  </li>
+                </ul>
+              </td>
+              <td class="p-2 text-left">{{ event.attendees.length }}</td>
             </tr>
           </tbody>
         </table>
