@@ -10,7 +10,6 @@ export default {
   },
   data() {
     return {
-      // removed unnecessary extra array to track services
       event: {
         name: '',
         services: [],
@@ -24,7 +23,7 @@ export default {
         },
         description: ''
       },
-      services:[]
+      services: []
     }
   },
   mounted() {
@@ -32,30 +31,27 @@ export default {
   },
   methods: {
     async handleSubmitForm() {
-      // Checks to see if there are any errors in validation
       const isFormCorrect = await this.v$.$validate()
-      // If no errors found. isFormCorrect = True then the form is submitted
       if (isFormCorrect) {
-        axios
-          .post(`${apiURL}/events`, this.event)
-          .then((response) => {
-            console.log('HIIIIIIIIIIIIIIIIIII',response)
-            alert('Event has been added.')
-            this.$router.push({ name: 'findevents' })
-          })
-          .catch((error) => {
-            console.log(error)
-          })
+        try {
+          const response = await axios.post(`${apiURL}/events`, this.event)
+          console.log('HIIIIIIIIIIIIIIIIIII', response)
+          alert('Event has been added.')
+          this.$router.push({ name: 'findevents' })
+        } catch (error) {
+          console.error(error)
+        }
       }
     },
-   async getServices() {
-      axios.get(`${apiURL}/services`).then((res) => {
-        this.services = res.data
-      })
-      window.scrollTo(0, 0)
+    async getServices() {
+      try {
+        const res = await axios.get(`${apiURL}/services`)
+        this.services = res.data.filter((service) => service.status === 'Active')
+      } catch (error) {
+        console.error(error)
+      }
     },
   },
-  // sets validations for the various data properties
   validations() {
     return {
       event: {
@@ -73,6 +69,7 @@ export default {
   }
 }
 </script>
+
 <template>
   <main>
     <div>

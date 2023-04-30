@@ -174,7 +174,6 @@ export default {
               <th class="p-4 text-left">Event Name</th>
               <th class="p-4 text-left">Event Date</th>
               <th class="p-4 text-left">Event Address</th>
-              <th class="p-4 text-left">Event Service</th>
               <th class="p-4 text-left">Event Attendees</th>
             </tr>
           </thead>
@@ -184,13 +183,6 @@ export default {
               <td class="p-2 text-left">{{ event.name }}</td>
               <td class="p-2 text-left">{{ formattedDate(event.date) }}</td>
               <td class="p-2 text-left">{{ event.address.line1 }}</td>
-              <td class="p-2 text-left">
-                <ul>
-                  <li v-for="service in event.services" :key="service.id">
-                   <span>{{ service.name }}</span> 
-                  </li>
-                </ul>
-              </td>
               <td class="p-2 text-left">{{ event.attendees.length }}</td>
             </tr>
           </tbody>
