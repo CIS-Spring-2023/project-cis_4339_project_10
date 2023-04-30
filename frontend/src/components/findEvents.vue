@@ -182,8 +182,8 @@ export default {
             :key="event._id">
               <td class="p-2 text-left">{{ event.name }}</td>
               <td class="p-2 text-left">{{ formattedDate(event.date) }}</td>
-              <td class="p-2 text-left">{{ event.address.line1 }}</td>
-              <td class="p-2 text-left">{{ event.attendees.length }}</td>
+              <td class="p-2 text-left">{{ event.address?.line1 }}</td>
+              <td class="p-2 text-left">{{ event.attendees?.length }}</td>
             </tr>
           </tbody>
         </table>
