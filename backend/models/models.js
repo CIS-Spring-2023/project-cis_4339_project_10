@@ -5,7 +5,7 @@ const Schema = mongoose.Schema
 // collection for service
 const serviceDataSchema = new Schema(
   {
-    _id: {type: String, default: uuid.v1 },
+    _id: { type: String, default: uuid.v1 },
     name: {
       type: String,
       required: true
@@ -77,7 +77,7 @@ const clientDataSchema = new Schema(
         type: String,
         required: true
       },
-      county: {
+      state: {
         type: String
       },
       zip: {
@@ -127,7 +127,7 @@ const eventDataSchema = new Schema(
       city: {
         type: String
       },
-      county: {
+      state: {
         type: String
       },
       zip: {
