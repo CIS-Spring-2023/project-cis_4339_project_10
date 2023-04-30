@@ -50,23 +50,10 @@ export default {
           this.clientAttendees.push(res.data)
         })
       })
-    // axios.get(`${apiURL}/services${this.$route.params.id}`)
-    //   console.log('URL',apiURL);
-    //   axios.get(apiURL).then((res) => {
-
-    //   this.services = res.data;
-    //   console.log('respojnseeeeee',res.data)
-
-    //   this.services.forEach((service) => {
-    //     if (this.event.services.includes(service._id)) {
-    //       console.log('Servicesarraytocheckselectedwhatsselected?',service)
-    //       service.selected = true;
-    //     }
-    //   });
-    .catch(error => {
-      console.log(error);
-    });
-    console.log('IDDDDDDDDDD',this.$route.params.id)
+        .catch(error => {
+          console.log(error);
+        });
+      console.log('IDDDDDDDDDD', this.$route.params.id)
     })
   },
   methods: {
@@ -106,240 +93,180 @@ export default {
 }
 </script>
 
-  <template>
-    <main>
-      <div>
-        <h1
-          class="font-bold text-4xl text-red-700 tracking-widest text-center mt-10"
-        >
-          Update Event
-        </h1>
-      </div>
-      <div class="px-10 py-20">
-        <form @submit.prevent="handleSubmitForm">
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
-          >
-            <h2 class="text-2xl font-bold">Event Details</h2>
-            <!-- form field -->
-            <div class="flex flex-col">
-              <label class="block">
-                <span class="text-gray-700">Event Name</span>
-                <span style="color: #ff0000">*</span>
-                <input
-                  type="text"
-                  class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  v-model="event.name"
-                />
-                <span class="text-black" v-if="v$.event.name.$error">
-                  <p
-                    class="text-red-700"
-                    v-for="error of v$.event.name.$errors"
-                    :key="error.$uid"
-                  >
-                    {{ error.$message }}!
-                  </p>
-                </span>
-              </label>
-            </div>
+<template>
+  <main>
+    <div>
+      <h1 class="font-bold text-4xl text-red-700 tracking-widest text-center mt-10">
+        Update Event
+      </h1>
+    </div>
+    <div class="px-10 py-20">
+      <form @submit.prevent="handleSubmitForm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
+          <h2 class="text-2xl font-bold">Event Details</h2>
+          <!-- form field -->
+          <div class="flex flex-col">
+            <label class="block">
+              <span class="text-gray-700">Event Name</span>
+              <span style="color: #ff0000">*</span>
+              <input type="text"
+                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                v-model="event.name" />
+              <span class="text-black" v-if="v$.event.name.$error">
+                <p class="text-red-700" v-for="error of v$.event.name.$errors" :key="error.$uid">
+                  {{ error.$message }}!
+                </p>
+              </span>
+            </label>
+          </div>
 
-            <!-- form field -->
-            <div class="flex flex-col">
-              <label class="block">
-                <span class="text-gray-700">Date</span>
-                <span style="color: #ff0000">*</span>
-                <input
-                  type="date"
-                  class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  v-model="event.date"
-                />
-                <span class="text-black" v-if="v$.event.date.$error">
-                  <p
-                    class="text-red-700"
-                    v-for="error of v$.event.date.$errors"
-                    :key="error.$uid"
-                  >
-                    {{ error.$message }}!
-                  </p>
-                </span>
-              </label>
-            </div>
+          <!-- form field -->
+          <div class="flex flex-col">
+            <label class="block">
+              <span class="text-gray-700">Date</span>
+              <span style="color: #ff0000">*</span>
+              <input type="date"
+                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                v-model="event.date" />
+              <span class="text-black" v-if="v$.event.date.$error">
+                <p class="text-red-700" v-for="error of v$.event.date.$errors" :key="error.$uid">
+                  {{ error.$message }}!
+                </p>
+              </span>
+            </label>
+          </div>
 
-            <div></div>
-            <div></div>
-            <!-- form field -->
-            <div class="flex flex-col">
-              <label class="block">
-                <span class="text-gray-700">Description</span>
-                <!-- added missing v-model connection -->
-                <textarea
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  rows="2"
-                  v-model="event.description"
-                ></textarea>
-              </label>
-            </div>
+          <div></div>
+          <div></div>
+          <!-- form field -->
+          <div class="flex flex-col">
+            <label class="block">
+              <span class="text-gray-700">Description</span>
+              <!-- added missing v-model connection -->
+              <textarea
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                rows="2" v-model="event.description"></textarea>
+            </label>
+          </div>
 
-            <div></div>
-            <div></div>
-            <div></div>
-            <!-- form field -->
-            <div class="flex flex-col grid-cols-3">
+          <div></div>
+          <div></div>
+          <div></div>
+          <!-- form field -->
+          <div class="flex flex-col grid-cols-3">
             <label>Services Offered at Event</label>
             <div v-for="service in services" :key="service._id">
               <label class="inline-flex items-center">
-                <input
-                  type="checkbox"
-                  :id="`service._id`"
-                  :value="service._id"
-                  v-model="event.services"
-                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50"
-                />
+                <input type="checkbox" :id="`service._id`" :value="service._id" v-model="event.services"
+                  class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50" />
                 <span class="ml-2">{{ service.name }}</span>
               </label>
             </div>
           </div>
-          </div>
+        </div>
 
-          <!-- grid container -->
-          <div
-            class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
-          >
-            <h2 class="text-2xl font-bold">Address</h2>
-            <!-- form field -->
-            <div class="flex flex-col">
-              <label class="block">
-                <span class="text-gray-700">Address Line 1</span>
-                <input
-                  type="text"
-                  class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  placeholder
-                  v-model="event.address.line1"
-                />
-              </label>
-            </div>
-            <!-- form field -->
-            <div class="flex flex-col">
-              <label class="block">
-                <span class="text-gray-700">Address Line 2</span>
-                <input
-                  type="text"
-                  class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  placeholder
-                  v-model="event.address.line2"
-                />
-              </label>
-            </div>
-            <!-- form field -->
-            <div class="flex flex-col">
-              <label class="block">
-                <span class="text-gray-700">City</span>
-                <input
-                  type="text"
-                  class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  placeholder
-                  v-model="event.address.city"
-                />
-              </label>
-            </div>
-            <div></div>
-            <!-- form field -->
-            <div class="flex flex-col">
-              <label class="block">
-                <span class="text-gray-700">County</span>
-                <input
-                  type="text"
-                  class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  placeholder
-                  v-model="event.address.county"
-                />
-              </label>
-            </div>
-            <!-- form field -->
-            <div class="flex flex-col">
-              <label class="block">
-                <span class="text-gray-700">Zip Code</span>
-                <input
-                  type="text"
-                  class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  placeholder
-                  v-model="event.address.zip"
-                />
-              </label>
-            </div>
+        <!-- grid container -->
+        <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
+          <h2 class="text-2xl font-bold">Address</h2>
+          <!-- form field -->
+          <div class="flex flex-col">
+            <label class="block">
+              <span class="text-gray-700">Address Line 1</span>
+              <input type="text"
+                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                placeholder v-model="event.address.line1" />
+            </label>
           </div>
-
-          <!-- grid container -->
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
-          >
-            <div class="flex justify-between mt-10 mr-20">
-              <button
-                @click="handleEventUpdate"
-                type="submit"
-                class="bg-green-700 text-white rounded"
-              >
-                Update Event
-              </button>
-            </div>
-            <div class="flex justify-between mt-10 mr-20">
-              <button
-                @click="eventDelete"
-                type="submit"
-                class="bg-red-700 text-white rounded"
-              >
-                Delete Event
-              </button>
-            </div>
-            <div class="flex justify-between mt-10 mr-20">
-              <button
-                type="reset"
-                class="border border-red-700 bg-white text-red-700 rounded"
-                @click="$router.back()"
-              >
-                Go back
-              </button>
-            </div>
+          <!-- form field -->
+          <div class="flex flex-col">
+            <label class="block">
+              <span class="text-gray-700">Address Line 2</span>
+              <input type="text"
+                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                placeholder v-model="event.address.line2" />
+            </label>
           </div>
-
-          <hr class="mt-10 mb-10" />
-
-          <!-- grid container -->
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
-          >
-            <div>
-              <h2 class="text-2xl font-bold">List of Attendees</h2>
-              <h3 class="italic">Click table row to edit/display an entry</h3>
-            </div>
-            <div class="flex flex-col col-span-2">
-              <table class="min-w-full shadow-md rounded">
-                <thead class="bg-gray-50 text-xl">
-                  <tr>
-                    <th class="p-4 text-left">Name</th>
-                    <th class="p-4 text-left">City</th>
-                    <th class="p-4 text-left">Phone Number</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-300">
-                  <tr
-                    @click="editClient(client._id)"
-                    v-for="client in clientAttendees"
-                    :key="client._id"
-                  >
-                    <td class="p-2 text-left">
-                      {{ client.firstName + ' ' + client.lastName }}
-                    </td>
-                    <td class="p-2 text-left">{{ client.address.city }}</td>
-                    <td class="p-2 text-left">
-                      {{ client.phoneNumber.primary }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <!-- form field -->
+          <div class="flex flex-col">
+            <label class="block">
+              <span class="text-gray-700">City</span>
+              <input type="text"
+                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                placeholder v-model="event.address.city" />
+            </label>
           </div>
-        </form>
-      </div>
-    </main>
-  </template>
+          <div></div>
+          <!-- form field -->
+          <div class="flex flex-col">
+            <label class="block">
+              <span class="text-gray-700">County</span>
+              <input type="text"
+                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                placeholder v-model="event.address.county" />
+            </label>
+          </div>
+          <!-- form field -->
+          <div class="flex flex-col">
+            <label class="block">
+              <span class="text-gray-700">Zip Code</span>
+              <input type="text"
+                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                placeholder v-model="event.address.zip" />
+            </label>
+          </div>
+        </div>
+
+        <!-- grid container -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
+          <div class="flex justify-between mt-10 mr-20">
+            <button @click="handleEventUpdate" type="submit" class="bg-green-700 text-white rounded">
+              Update Event
+            </button>
+          </div>
+          <div class="flex justify-between mt-10 mr-20">
+            <button @click="eventDelete" type="submit" class="bg-red-700 text-white rounded">
+              Delete Event
+            </button>
+          </div>
+          <div class="flex justify-between mt-10 mr-20">
+            <button type="reset" class="border border-red-700 bg-white text-red-700 rounded" @click="$router.back()">
+              Go back
+            </button>
+          </div>
+        </div>
+
+        <hr class="mt-10 mb-10" />
+
+        <!-- grid container -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10">
+          <div>
+            <h2 class="text-2xl font-bold">List of Attendees</h2>
+            <h3 class="italic">Click table row to edit/display an entry</h3>
+          </div>
+          <div class="flex flex-col col-span-2">
+            <table class="min-w-full shadow-md rounded">
+              <thead class="bg-gray-50 text-xl">
+                <tr>
+                  <th class="p-4 text-left">Name</th>
+                  <th class="p-4 text-left">City</th>
+                  <th class="p-4 text-left">Phone Number</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-300">
+                <tr @click="editClient(client._id)" v-for="client in clientAttendees" :key="client._id">
+                  <td class="p-2 text-left">
+                    {{ client.firstName + ' ' + client.lastName }}
+                  </td>
+                  <td class="p-2 text-left">{{ client.address.city }}</td>
+                  <td class="p-2 text-left">
+                    {{ client.phoneNumber.primary }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+</template>

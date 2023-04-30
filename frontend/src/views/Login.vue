@@ -1,16 +1,23 @@
 <template>
+  <!-- Create the login container -->
   <div class="login-container">
+    <!-- Create the login card -->
     <div class="login-card">
+      <!-- Add the login title -->
       <h3 class="login-title">Login</h3>
+      <!-- Create the login form and handle submit event -->
       <form class="login-form" @submit.prevent="store.login(username, password)">
+        <!-- Create the username input field -->
         <div class="form-group">
           <label>Username: </label>
           <input type="text" class="form-control" v-model="username" placeholder="username" required>
         </div>
+        <!-- Create the password input field -->
         <div class="form-group">
           <label>Password: </label>
           <input type="password" class="form-control" v-model="password" placeholder="password" required>
         </div>
+        <!-- Create the submit button -->
         <button class="login-button">Submit</button>
         <!-- Add the error message element here -->
         <div v-if="store.errorMessage" class="error-message">{{ store.errorMessage }}</div>
@@ -25,22 +32,27 @@ import axios from "axios";
 const apiURL = import.meta.env.VITE_ROOT_API;
 
 export default {
+  // Define component data
   data: () => {
     return {
       username: "",
       password: "",
     };
   },
+  // Define the component setup
   setup() {
     const store = useLoggedInUserStore();
     return {
       store,
     };
   },
+  // Define the component created lifecycle hook
   created() {
     this.fetchData();
   },
+  // Define component methods
   methods: {
+    // Fetch data from the API
     async fetchData() {
       try {
         const response = await axios.get(`${apiURL}/org`); // Replace "/org" with the correct endpoint

@@ -1,4 +1,5 @@
 <script>
+// Import the required modules
 import axios from 'axios'
 import { useLoggedInUserStore } from '@/store/loggedInUser'
 const apiURL = import.meta.env.VITE_ROOT_API
@@ -6,6 +7,7 @@ const apiURL = import.meta.env.VITE_ROOT_API
 export default {
   name: 'App',
   setup() {
+    // Get the user store
     const user = useLoggedInUserStore()
     return { user }
   },
@@ -15,6 +17,7 @@ export default {
     }
   },
   created() {
+    // Fetch organization name on component creation
     axios.get(`${apiURL}/org`).then((res) => {
       console.log('chilldood', res)
       if (res.data && res.data.name) {
