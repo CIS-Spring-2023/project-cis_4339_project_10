@@ -22,7 +22,11 @@ export default {
   created() {
     axios.get(`${apiURL}/services/id/${this.$route.params.id}`).then((res) => {
       this.service = res.data
+<<<<<<< HEAD
     })
+=======
+        })
+>>>>>>> 168f8e1c9684d66ddd6daf27c1e178cc1d573459
   },
   methods: {
     // better formatted date, converts UTC to local time
@@ -40,7 +44,10 @@ export default {
         this.$router.back()
       })
     },
+<<<<<<< HEAD
 
+=======
+>>>>>>> 168f8e1c9684d66ddd6daf27c1e178cc1d573459
     ServiceDelete() {
       axios.delete(`${apiURL}/services/${this.$route.params.id}`).then(() => {
         alert('Event has been deleted.')
