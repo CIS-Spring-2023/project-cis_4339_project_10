@@ -1,4 +1,5 @@
 <script>
+
 import { DateTime } from 'luxon'
 import axios from 'axios'
 import AttendanceChart from './barChart.vue'
@@ -31,6 +32,15 @@ export default {
     this.getAttendanceData()
     this.clientByZip()
   },
+  computed: {
+  upcomingEvents() {
+    const today = DateTime.now().toISODate();
+    return this.recentEvents.filter((event) => {
+      const eventDate = DateTime.fromISO(event.date).toISODate();
+      return eventDate >= today;
+    });
+  },
+},
   methods: {
     async getAttendanceData() {
       try {
