@@ -21,6 +21,9 @@ export default {
     };
   },
   methods: {
+    //The handleSubmitForm method checks if the form has any validation errors,
+    // and if not, submits the form data to the API. 
+    //If the submission is successful, the user is redirected to another page. If the submission fails, an error message is displayed.
     async handleSubmitForm() {
       // Checks to see if there are any errors in validation
       const isFormCorrect = await this.v$.$validate()
@@ -55,7 +58,7 @@ export default {
         }
       }
     },
-
+// The fetchServices method retrieves a list of services from the API.
     async fetchServices() {
       try {
         const { data } = await axios.get(`${apiURL}/services`);
@@ -80,7 +83,7 @@ export default {
       this.$router.push({ name: 'servicedetails', params: { id: serviceID } });
     },
   },
-  
+  //validations function that defines the validation rules for the form.
   validations() {
     return {
       newService: {
