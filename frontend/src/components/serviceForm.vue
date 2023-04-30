@@ -106,7 +106,7 @@ export default {
       <h1
         class="font-bold text-4xl text-red-700 tracking-widest text-center mt-10"
       >
-        Create Service
+        Create New Service
       </h1>
     </div>
     <div class="px-10 pt-5">
@@ -114,11 +114,11 @@ export default {
         <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
         >
-          <h2 class="text-2xl font-bold">Create Service</h2>
+          <h2 class="text-2xl font-bold">Create New Service</h2>
         <div class="flex flex-col">
           <div class="flex">
             <label class="block flex flex-col">
-              <span class="text-gray-700 font-normal">Name:</span>
+              <span class="text-gray-700 font-normal">Name<span class="text-red-600">*</span></span>
               <input v-model="newService.name" type="text" />
               <span class="text-black" v-if="v$.newService.name.$error">
                 <p
@@ -131,11 +131,11 @@ export default {
               </span>
             </label>
             <label class="block flex flex-col ml-6">
-              <span class="text-gray-700">Description:</span>
+              <span class="text-gray-700">Description<span class="text-red-600">*</span></span>
               <input v-model="newService.description" type="text" />
             </label>
             <label class="block flex items-center ml-6">
-              <span class="text-gray-700">Status:</span>
+              <span class="text-gray-700">Status<span class="text-red-600">*</span></span>
               <input v-model="newService.status" type="checkbox" />
             </label>
             </div>
@@ -145,7 +145,7 @@ export default {
             class="bg-red-700 text-white rounded"
             type="submit"
           >
-            Create Service
+            Create New Service
           </button>
           </div>
         </div>
