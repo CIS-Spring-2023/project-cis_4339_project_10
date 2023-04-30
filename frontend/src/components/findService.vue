@@ -18,6 +18,7 @@ export default {
     const user = useLoggedInUserStore();
     return { user };
   },
+  // This method is called when the user clicks the "Search Service" button. It checks the value of the searchBy property to determine which endpoint to call on the API
   methods: {
     handleSubmitForm() {
       let endpoint = ''
@@ -45,7 +46,7 @@ export default {
         }
       }
     },
-
+// This method is called when the user clicks the "Search Service" button. It checks the value of the searchBy property to determine which endpoint to call on the API
     async fetchServices() {
       try {
         const { data } = await axios.get(`${apiURL}/services`);
