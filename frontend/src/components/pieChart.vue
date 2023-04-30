@@ -8,10 +8,10 @@ export default {
   // Define the component's props
   props: {
     label: {
-      type: Array
+      type: Array // define the 'label' prop as an array
     },
     chartData: {
-      type: Array
+      type: Array // define the 'chartData' prop as an array
     }
   },
   // Lifecycle hook: called when the component is mounted
@@ -21,24 +21,24 @@ export default {
 
     // Create a new Chart.js instance and render the doughnut chart
     new Chart(this.$refs.myChart, {
-      type: 'doughnut',
+      type: 'doughnut', // specify the type of chart as doughnut
       data: {
-        labels: this.label,
+        labels: this.label, // use the 'label' prop as chart labels
         datasets: [
           {
-            data: this.chartData,
-            backgroundColor: pieBackgroundColor
+            data: this.chartData, // use the 'chartData' prop as chart data
+            backgroundColor: pieBackgroundColor // use the generated colors as background colors
           }
         ]
       },
       options: {
         plugins: {
           legend: {
-            display: true
+            display: true // enable the chart legend display
           }
         },
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: true, // make the chart responsive
+        maintainAspectRatio: false, // do not maintain the aspect ratio of the chart
       }
     });
   },
@@ -47,8 +47,8 @@ export default {
   methods: {
     // Method to generate random RGBA color
     getColor() {
-      let channel = () => Math.random() * 255
-      return `rgba(${channel()}, ${channel()}, ${channel()}, 0.2)`
+      let channel = () => Math.random() * 255 // generate random values between 0 and 255
+      return `rgba(${channel()}, ${channel()}, ${channel()}, 0.2)` // return an RGBA color string with the alpha value set to 0.2
     }
   }
 }

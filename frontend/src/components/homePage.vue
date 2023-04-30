@@ -1,47 +1,56 @@
 <script>
-
+// Import necessary modules and components
 import { DateTime } from 'luxon'
 import axios from 'axios'
 import AttendanceChart from './barChart.vue'
 import ClientChart from './pieChart.vue'
 import { useLoggedInUserStore } from '@/store/loggedInUser';
+
+// Retrieve the root API URL from environment variables
 const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
+  // Define components used in the template
   components: {
     AttendanceChart,
     ClientChart
   },
+  // Define data properties used in the template
   data() {
     return {
-      recentEvents: [],
-      labels: [],
-      chartData: [],
-      loading: false,
-      pieLoading: false,
-      error: null,
-      pielabels: [],
-      pieData: []
+      recentEvents: [], // Stores an array of events retrieved from the API
+      labels: [], // Stores an array of labels to be used in the bar chart
+      chartData: [], // Stores an array of data to be used in the bar chart
+      loading: false, // Controls the display of a loading animation
+      pieLoading: false, // Controls the display of a loading animation for the pie chart
+      error: null, // Stores an error message, if an error occurs
+      pielabels: [], // Stores an array of labels to be used in the pie chart
+      pieData: [] // Stores an array of data to be used in the pie chart
     }
   },
+  // Define the user variable that is used in the template
   setup() {
     const user = useLoggedInUserStore();
     return { user };
   },
+  // Call the methods to retrieve data from the API when the component is mounted
   mounted() {
     this.getAttendanceData()
     this.clientByZip()
   },
+  // Define computed properties used in the template
   computed: {
-  upcomingEvents() {
-    const today = DateTime.now().toISODate();
-    return this.recentEvents.filter((event) => {
-      const eventDate = DateTime.fromISO(event.date).toISODate();
-      return eventDate >= today;
-    });
+    upcomingEvents() {
+      const today = DateTime.now().toISODate();
+      return this.recentEvents.filter((event) => {
+        const eventDate = DateTime.fromISO(event.date).toISODate();
+        return eventDate >= today;
+      });
+    },
   },
-},
+  // Define methods used in the template
   methods: {
+    // Method to retrieve event data from the API
     async getAttendanceData() {
       try {
         this.error = null
@@ -53,6 +62,7 @@ export default {
         )
         this.chartData = response.data.map((item) => item.attendees.length)
       } catch (err) {
+        // Handle different types of errors that may occur when making the API call
         if (err.response) {
           // client received an error response (5xx, 4xx)
           this.error = {
@@ -73,9 +83,11 @@ export default {
           }
         }
       }
+      // Set loading to false to hide the loading animation
       this.loading = false
     },
 
+    // Method to retrieve client data by zip code from the API
     async clientByZip() {
       try {
         const res = await axios.get(`${apiURL}/clients/zip`)
